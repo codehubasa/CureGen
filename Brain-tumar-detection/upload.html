@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Medical Image Upload</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,sans-serif;
+}
+
+/* black dotted background */
+body{
+    min-height:100vh;
+    background-color:#050505;
+    background-image:
+      radial-gradient(#1f2933 1px, transparent 1px);
+    background-size:18px 18px;
+    display:flex;
+    justify-content:center;
+    padding:40px 16px;
+}
+
+.container{
+    width:950px;
+    max-width:100%;
+}
+
+h1{
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:6px;
+    color:#ffffff;
+}
+
+.sub{
+    text-align:center;
+    color:#9ca3af;
+    margin-bottom:35px;
+}
+
+.section-title{
+    font-weight:600;
+    margin-bottom:14px;
+    color:#ffffff;
+}
+
+/* scan cards */
+.scan-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:18px;
+    margin-bottom:35px;
+}
+
+.scan-card{
+    background:rgba(255,255,255,.9);
+    border-radius:16px;
+    padding:26px 20px;
+    text-align:center;
+    cursor:pointer;
+    position:relative;
+    border:2px solid transparent;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+    transition:.25s;
+}
+
+.scan-card:hover{transform:translateY(-3px);}
+
+.scan-card.active{
+    background:linear-gradient(180deg,#34d399 0%,#22c55e 45%,#15803d 100%);
+    color:white;
+    border:2px solid #22c55e;
+    transform:translateY(-6px);
+    box-shadow:
+        0 18px 35px rgba(0,0,0,.55),
+        0 0 28px rgba(34,197,94,.55),
+        inset 0 2px 0 rgba(255,255,255,.35),
+        inset 0 -8px 14px rgba(0,0,0,.25);
+}
+
+.scan-card.active p{color:#dcfce7;}
+
+.scan-card .icon{
+    width:52px;
+    height:52px;
+    margin:0 auto 14px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    background:rgba(0,0,0,.08);
+}
+
+.scan-card h3{margin-bottom:6px;}
+.scan-card p{font-size:13px;color:#475569;}
+
+.check{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:white;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:700;
+}
+
+.scan-card.active .check{
+    display:flex;
+    color:#15803d;
+}
+
+/* upload box */
+.upload-box{
+    background:rgba(255,255,255,.9);
+    border-radius:18px;
+    padding:50px 20px;
+    text-align:center;
+    border:2px dashed #94a3b8;
+    box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+.upload-box.drag{border-color:#22c55e;}
+
+.upload-box .up-icon{
+    font-size:32px;
+    margin-bottom:12px;
+    color:#22c55e;
+}
+
+.upload-box p{font-size:13px;color:#475569;}
+.upload-box input{display:none;}
+
+.browse{
+    color:#22c55e;
+    cursor:pointer;
+    font-weight:600;
+}
+
+/* small square preview */
+.preview-grid{
+    margin-top:18px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.preview-grid img{
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:8px;
+    border:2px solid #22c55e;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);
+}
+
+/* start ai button */
+.ai-btn{
+    margin-top:30px;
+    padding:14px 28px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:linear-gradient(180deg,#34d399,#16a34a);
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    box-shadow:
+        0 10px 25px rgba(34,197,94,.45),
+        inset 0 2px 0 rgba(255,255,255,.25);
+}
+
+/* overlay */
+.ai-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+}
+
+/* ai panel */
+.ai-box{
+    position:relative;
+    width:420px;
+    height:360px;
+    background:#0b1220;
+    border-radius:8px;
+    padding:28px;
+    text-align:center;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:.4s;
+    box-shadow:0 25px 60px rgba(0,0,0,.8);
+}
+
+/* BLACK + GREEN mixed 3D finish */
+.ai-box.result-mode{
+    background:
+        linear-gradient(160deg,
+            #050a08 0%,
+            #0b1f14 35%,
+            #16a34a 70%,
+            #064e3b 100%);
+    border:1px solid rgba(34,197,94,.7);
+    box-shadow:
+        0 40px 90px rgba(0,0,0,.95),
+        0 0 55px rgba(34,197,94,.55),
+        inset 0 2px 0 rgba(255,255,255,.15),
+        inset 0 -10px 18px rgba(0,0,0,.45);
+}
+
+/* close button */
+.close-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:32px;
+    height:32px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,0,0,.5);
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+    line-height:32px;
+}
+
+/* progress */
+.progress-ring{
+    position:relative;
+    width:140px;
+    height:140px;
+    margin-bottom:18px;
+}
+
+.progress-ring svg{transform:rotate(-90deg);}
+
+.progress-ring circle{
+    fill:none;
+    stroke-width:10;
+}
+
+.progress-bg{stroke:rgba(255,255,255,.25);}
+
+.progress-bar{
+    stroke:white;
+    stroke-linecap:round;
+    stroke-dasharray:440;
+    stroke-dashoffset:440;
+}
+
+.progress-text{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    font-weight:700;
+}
+
+.result-thumb{
+    margin-top:14px;
+    width:80px;
+    height:80px;
+    object-fit:cover;
+    border-radius:8px;
+    border:2px solid #22c55e;
+    box-shadow:0 6px 20px rgba(0,0,0,.6);
+}
+
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Medical Image Upload</h1>
+<div class="sub">Upload your scan images for analysis</div>
+
+<div class="section-title">Select Scan Type</div>
+
+<div class="scan-grid">
+
+    <div class="scan-card" id="mriCard" onclick="selectScan('mri')">
+        <div class="check">✓</div>
+        <div class="icon">🧲</div>
+        <h3>MRI Test</h3>
+        <p>Magnetic Resonance Imaging</p>
+    </div>
+
+    <div class="scan-card active" id="ctCard" onclick="selectScan('ct')">
+        <div class="check">✓</div>
+        <div class="icon">🎯</div>
+        <h3>CT Scan</h3>
+        <p>Computed Tomography</p>
+    </div>
+
+</div>
+
+<div class="section-title">Upload Images</div>
+
+<div class="upload-box" id="dropArea">
+
+    <div class="up-icon">⬆</div>
+    <h4 id="dropText">Drop your CT scan images here</h4>
+
+    <p>
+        or <span class="browse" onclick="fileInput.click()">click to browse</span>
+        · PNG, JPG
+    </p>
+
+    <input type="file" id="fileInput" multiple accept="image/*">
+
+</div>
+
+<div id="previewGrid" class="preview-grid"></div>
+
+<div style="text-align:center;">
+    <button class="ai-btn" onclick="startAI()">Start AI Processing</button>
+</div>
+
+</div>
+
+<!-- AI PANEL -->
+<div id="overlay" class="ai-overlay hidden">
+
+<div id="aiBox" class="ai-box">
+
+    <button class="close-btn" onclick="closeAI()">✕</button>
+
+    <div id="loadingPanel">
+
+        <div class="progress-ring">
+            <svg width="140" height="140">
+                <circle class="progress-bg" cx="70" cy="70" r="70"></circle>
+                <circle class="progress-bar" cx="70" cy="70" r="70"></circle>
+            </svg>
+            <div id="progressText" class="progress-text">0%</div>
+        </div>
+
+        <h3>AI Processing</h3>
+        <p>Analyzing medical scan using deep learning</p>
+
+    </div>
+
+</div>
+
+</div>
+
+<script>
+let selectedScan = "ct";
+let lastPreviewURL = null;
+
+const mriCard = document.getElementById("mriCard");
+const ctCard  = document.getElementById("ctCard");
+const dropText = document.getElementById("dropText");
+
+function selectScan(type){
+    selectedScan = type;
+
+    if(type === "mri"){
+        mriCard.classList.add("active");
+        ctCard.classList.remove("active");
+        dropText.innerText = "Drop your MRI images here";
+    }else{
+        ctCard.classList.add("active");
+        mriCard.classList.remove("active");
+        dropText.innerText = "Drop your CT scan images here";
+    }
+}
+
+/* preview logic */
+const previewGrid = document.getElementById("previewGrid");
+const fileInput = document.getElementById("fileInput");
+
+fileInput.addEventListener("change",()=>{
+    previewGrid.innerHTML = "";
+    lastPreviewURL = null;
+
+    [...fileInput.files].forEach((file,idx)=>{
+        if(!file.type.startsWith("image/")) return;
+
+        const url = URL.createObjectURL(file);
+        if(idx===0) lastPreviewURL = url;
+
+        const img = document.createElement("img");
+        img.src = url;
+        previewGrid.appendChild(img);
+    });
+});
+
+/* drag & drop */
+const dropArea = document.getElementById("dropArea");
+
+["dragenter","dragover"].forEach(e=>{
+    dropArea.addEventListener(e,ev=>{
+        ev.preventDefault();
+        dropArea.classList.add("drag");
+    });
+});
+
+["dragleave","drop"].forEach(e=>{
+    dropArea.addEventListener(e,ev=>{
+        ev.preventDefault();
+        dropArea.classList.remove("drag");
+    });
+});
+
+dropArea.addEventListener("drop",e=>{
+    fileInput.files = e.dataTransfer.files;
+    fileInput.dispatchEvent(new Event("change"));
+});
+
+/* AI processing simulation */
+let aiInterval;
+
+function startAI(){
+
+    if(!fileInput.files.length){
+        alert("Please upload an image first.");
+        return;
+    }
+
+    const overlay = document.getElementById("overlay");
+    const panel   = document.getElementById("loadingPanel");
+    const aiBox   = document.getElementById("aiBox");
+
+    overlay.classList.remove("hidden");
+    aiBox.classList.remove("result-mode");
+
+    panel.innerHTML = `
+        <div class="progress-ring">
+            <svg width="140" height="140">
+                <circle class="progress-bg" cx="70" cy="70" r="70"></circle>
+                <circle class="progress-bar" cx="70" cy="70" r="70"></circle>
+            </svg>
+            <div id="progressText" class="progress-text">0%</div>
+        </div>
+        <h3>AI Processing</h3>
+        <p>Analyzing medical scan using deep learning</p>
+    `;
+
+    const bar = panel.querySelector(".progress-bar");
+    const text = panel.querySelector("#progressText");
+
+    let progress = 0;
+    const circumference = 2 * Math.PI * 70;
+
+    bar.style.strokeDasharray = circumference;
+    bar.style.strokeDashoffset = circumference;
+
+    clearInterval(aiInterval);
+
+    aiInterval = setInterval(()=>{
+
+        progress++;
+        text.innerText = progress + "%";
+
+        const offset = circumference - (progress / 100) * circumference;
+        bar.style.strokeDashoffset = offset;
+
+        if(progress >= 100){
+
+            clearInterval(aiInterval);
+
+            setTimeout(()=>{
+
+                aiBox.classList.add("result-mode");
+
+                panel.innerHTML = `
+                    <h3>Processing Complete</h3>
+                    <p>Your scan has been successfully analyzed.</p>
+                    ${
+                      lastPreviewURL
+                      ? `<img src="${lastPreviewURL}" class="result-thumb">`
+                      : ""
+                    }
+                `;
+
+            },300);
+        }
+
+    },30);
+}
+
+function closeAI(){
+    document.getElementById("overlay").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
