@@ -13,7 +13,7 @@
 
 Brain Tumor Detection AI
 
-A powerful Flask-based web application that detects brain tumors from MRI and CT scan images using deep learning models. This system provides fast, accurate predictions along with detailed reports, making it useful for educational, research, and prototype medical applications.
+ Brain Tumor Detection is a powerful Flask-based web application that detects brain tumors from MRI and CT scan images using deep learning models. This system provides fast, accurate predictions along with detailed reports, making it useful for educational, research, and prototype medical applications.
 
 🚀 Features
 
