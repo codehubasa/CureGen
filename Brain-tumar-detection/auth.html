@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Brain Tumor AI diagonisis – Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background-color:#050505;
+    background-image:
+      radial-gradient(#1f2933 1px, transparent 1px);
+    background-size:18px 18px;
+}
+
+.auth-box{
+    width:390px;
+    padding:38px 34px;
+    border-radius:18px;
+
+    background:linear-gradient(
+        180deg,
+        rgba(255,255,255,0.08),
+        rgba(255,255,255,0.02)
+    );
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    color:#fff;
+
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 25px 60px rgba(0,0,0,0.8),
+        0 0 40px rgba(37,99,235,0.15);
+}
+
+.auth-box h2{
+    text-align:center;
+    margin-bottom:6px;
+    font-weight:600;
+    letter-spacing:0.3px;
+}
+
+.subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:26px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    font-size:12px;
+    color:#cbd5f5;
+}
+
+.input-group input{
+    width:100%;
+    padding:12px 12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.08);
+    margin-top:6px;
+    outline:none;
+
+    background:rgba(0,0,0,0.45);
+    color:white;
+
+    transition:0.2s;
+}
+
+.input-group input::placeholder{
+    color:#6b7280;
+}
+
+.input-group input:focus{
+    border-color:#2563eb;
+    box-shadow:0 0 0 3px rgba(37,99,235,0.25);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+
+    background:linear-gradient(135deg,#2563eb,#4f46e5);
+    color:white;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+
+    margin-top:10px;
+    transition:0.25s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 25px rgba(37,99,235,0.45);
+}
+
+.switch{
+    margin-top:20px;
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+.switch span{
+    color:#60a5fa;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.switch span:hover{
+    text-decoration:underline;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="auth-box">
+
+    <!-- SIGN IN -->
+    <div id="loginBox">
+
+        <h2>Brain Tumor AI diagonisis</h2>
+        <div class="subtitle">Sign in to continue</div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password">
+        </div>
+
+        <button onclick="login()">Sign In</button>
+
+        <div class="switch">
+            Don’t have an account?
+            <span onclick="showRegister()">Sign up</span>
+        </div>
+
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="registerBox" class="hidden">
+
+        <h2>Brain Tumor AI diagonisis</h2>
+        <div class="subtitle">Register for Brain Tumor AI diagonisis system</div>
+
+        <div class="input-group">
+            <label>Full name</label>
+            <input type="text" id="regName" placeholder="Your name">
+        </div>
+
+        <div class="input-group">
+            <label>Email</label>
+            <input type="email" id="regEmail" placeholder="Your email">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" placeholder="Create password">
+        </div>
+
+        <button onclick="register()">Create Account</button>
+
+        <div class="switch">
+            Already have an account?
+            <span onclick="showLogin()">Sign in</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function showRegister(){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("registerBox").classList.remove("hidden");
+}
+
+function showLogin(){
+    document.getElementById("registerBox").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function login(){
+
+    const email = document.getElementById("loginEmail").value;
+    const pass  = document.getElementById("loginPassword").value;
+
+    if(email==="" || pass===""){
+        alert("Please enter email and password");
+        return;
+    }
+
+    fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: pass })
+    }).then(res => res.json()).then(data => {
+        if(data.success){
+            window.location.href = "/upload-page";
+        }else{
+            alert(data.error);
+        }
+    });
+}
+
+function register(){
+
+    const name  = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const pass  = document.getElementById("regPassword").value;
+
+    if(name==="" || email==="" || pass===""){
+        alert("Please fill all fields");
+        return;
+    }
+
+    fetch('/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, password: pass })
+    }).then(res => res.json()).then(data => {
+        if(data.success){
+            alert("Account created successfully!");
+            showLogin();
+        }else{
+            alert(data.error);
+        }
+    });
+}
+</script>
+
+</body>
+</html>
