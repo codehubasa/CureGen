@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CureGen AI Pregnancy Guide</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.3), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#36f3ff;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:250px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{
+margin-top:20px;
+color:#5eead4;
+}
+
+.menu-card{
+display:flex;
+align-items:center;
+gap:12px;
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+}
+
+.menu-icon{
+font-size:18px;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:60px;
+}
+
+.title{
+text-align:center;
+margin-bottom:40px;
+}
+
+.title h1{
+font-size:44px;
+color:#36f3ff;
+}
+
+/* FORM */
+
+.form-box{
+
+max-width:900px;
+margin:auto;
+padding:40px;
+border-radius:22px;
+background:rgba(255,255,255,0.06);
+box-shadow:0 15px 40px rgba(0,0,0,0.7);
+
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:25px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+color:#67e8f9;
+}
+
+.input-group input,
+.input-group select{
+width:100%;
+padding:14px;
+border:none;
+border-radius:10px;
+background:#0f172a;
+color:white;
+}
+
+button{
+margin-top:25px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+}
+
+.guide-btn{
+background:linear-gradient(120deg,#22c55e,#4ade80);
+}
+
+.pdf-btn{
+background:#0ea5e9;
+}
+
+/* RESULT */
+
+.result-card{
+
+margin-top:30px;
+padding:25px;
+border-radius:15px;
+background:rgba(255,255,255,0.08);
+white-space:pre-line;
+
+}
+
+.result-card h3{
+color:#36f3ff;
+margin-bottom:10px;
+}
+
+</style>
+
+<script>
+
+/* WEEK DATABASE */
+
+const babyDevelopment = {
+
+1:"Baby is beginning development.",
+4:"Tiny embryo forming.",
+8:"Heartbeat detectable.",
+12:"Organs forming.",
+16:"Baby can move limbs.",
+20:"Baby movements felt.",
+22:"Facial features forming.",
+24:"Baby responds to sound.",
+28:"Eyes can open.",
+32:"Rapid weight gain.",
+36:"Preparing for birth.",
+40:"Full term baby ready."
+
+};
+
+
+/* AI GUIDE */
+
+function generateGuide(){
+
+let age=parseInt(document.getElementById("age").value);
+let week=parseInt(document.getElementById("week").value);
+let health=document.getElementById("health").value;
+
+let dev="Healthy baby development.";
+
+if(babyDevelopment[week]){
+
+dev=babyDevelopment[week];
+
+}
+
+let risk="Low Risk";
+
+if(age>35 || health!=="None"){
+
+risk="Moderate Risk – doctor monitoring recommended.";
+
+}
+
+if(age>40){
+
+risk="High Risk Pregnancy – regular clinical supervision required.";
+
+}
+
+let length=(week*1.3).toFixed(1);
+let weight=(week*22).toFixed(0);
+
+let output=
+
+"📅 WEEK "+week+" PREGNANCY GUIDE\n"+
+"────────────────────────────\n\n"+
+
+"🤱 Baby Development\n"+
+"Baby length approx "+length+" cm\n"+
+"Baby weight approx "+weight+" g\n"+
+dev+"\n\n"+
+
+"🥗 WHAT TO EAT\n"+
+"• Iron rich foods (spinach, lentils)\n"+
+"• Calcium (milk, yogurt, paneer)\n"+
+"• Omega-3 (walnuts, flaxseeds)\n"+
+"• Protein (eggs, dal, chickpeas)\n"+
+"• Folate vegetables\n\n"+
+
+"🚫 WHAT TO AVOID\n"+
+"• Raw meat or eggs\n"+
+"• Unpasteurised dairy\n"+
+"• High mercury fish\n"+
+"• Alcohol & smoking\n\n"+
+
+"✅ WHAT TO DO\n"+
+"• 30 min gentle walking\n"+
+"• Prenatal yoga\n"+
+"• Sleep on left side\n"+
+"• Drink 8-10 glasses water\n\n"+
+
+"⚠️ WHAT NOT TO DO\n"+
+"• Avoid heavy lifting\n"+
+"• Avoid intense workouts\n"+
+"• Avoid standing long time\n\n"+
+
+"🏥 UPCOMING TESTS\n"+
+"• Ultrasound scan\n"+
+"• Glucose tolerance test\n\n"+
+
+"🧠 AI Risk Analysis: "+risk+"\n"+
+"👩 Mother's Age: "+age+"\n"+
+"⚠ Reported Health Issue: "+health;
+
+document.getElementById("result").innerText=output;
+
+}
+
+
+/* PDF DOWNLOAD */
+
+function downloadPDF(){
+
+let text=document.getElementById("result").innerText;
+
+let blob=new Blob([text],{type:"application/pdf"});
+
+let link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+
+link.download="AI_Pregnancy_Report.pdf";
+
+link.click();
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo" style="cursor:pointer;" onclick="location.href='/index.html'">CureGen</div>
+<div id="authBox" style="display:flex; align-items:center;"></div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/brain-tumor.html'">🧠 Brain Tumor</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/skin-cancer.html'">🔬 Skin Cancer</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/heart.html'">❤️ Heart Attack</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/eye.html'">👁 Eye Cataract</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/lungs.html'">🫁 Lung Disease</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/blood-pressure.html'">🩺 BP Detection</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/sugar-level.html'">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="showHistory()">📄 PDF Reports</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/hospital.html'">🏥 Top Hospitals</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/chatbot.html'">🤖 AI Assistant</div>
+
+</div>
+
+<div class="main">
+
+<div class="title">
+<h1>AI Pregnancy Guide</h1>
+<p>Personalized pregnancy health insights</p>
+</div>
+
+<div class="form-box">
+
+<div class="form-grid">
+
+<div class="input-group">
+<label>Mother's Age</label>
+<input type="number" id="age" value="28">
+</div>
+
+<div class="input-group">
+<label>Pregnancy Week</label>
+<input type="number" id="week" value="12">
+</div>
+
+<div class="input-group">
+<label>Health Issues</label>
+<input type="text" id="health" placeholder="None">
+</div>
+
+<div class="input-group">
+<label>First Pregnancy?</label>
+<select>
+<option>Yes</option>
+<option>No</option>
+</select>
+</div>
+
+</div>
+
+<button class="guide-btn" onclick="generateGuide()" style="padding:15px; border-radius:10px; border:none; background:linear-gradient(120deg,#22c55e,#4ade80); color:black; font-weight:600; cursor:pointer;">
+✨ Get My Pregnancy Guide
+</button>
+
+<button class="pdf-btn" onclick="downloadPDF()" style="padding:15px; border-radius:10px; border:none; background:#0ea5e9; color:white; font-weight:600; cursor:pointer;">
+📄 Download Medical PDF
+</button>
+
+<div class="result-card">
+
+<h3>📊 AI Pregnancy Report</h3>
+
+<div id="result">
+Status: Awaiting patient input...
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PDF REPORTS HISTORY MODAL -->
+<div id="historyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(2,6,23,0.85); backdrop-filter:blur(8px); justify-content:center; align-items:center;">
+  <div style="background:linear-gradient(135deg, #020817, #0b1528); border:1px solid rgba(54,243,255,0.3); border-radius:20px; padding:35px; width:750px; max-width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0, 234, 255, 0.25); color:white; position:relative;">
+    <span style="position:absolute; right:22px; top:18px; font-size:24px; cursor:pointer; color:#9ca3af; transition:0.2s;" onclick="closeHistory()">✕</span>
+    <h2 style="color:#36f3ff; margin-bottom:10px; text-shadow:0 0 10px rgba(0,234,255,0.3);">📄 Your Diagnostic History</h2>
+    <p style="color:#9ca3af; font-size:13px; margin-bottom:20px;">Download official PDF reports or manage previous AI screening sessions.</p>
+    <div id="historyContent" style="min-height: 150px; max-height: 40vh; overflow-y: auto;">
+        Loading report logs...
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:30px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+      <button onclick="clearHistory()" style="padding:10px 16px; background:#ef4444; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Clear All Logs</button>
+      <button onclick="closeHistory()" style="padding:10px 16px; background:#334155; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* CSS styles for active sidebar and navbar signout */
+.menu-card.active {
+    background: linear-gradient(120deg,#00eaff,#00ffa6);
+    color: black;
+    font-weight: 600;
+}
+.signin-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #36f3ff;
+    background: transparent;
+    color: #36f3ff;
+    cursor: pointer;
+    font-weight: 600;
+}
+.signin-btn:hover {
+    background: rgba(54, 243, 255, 0.1);
+}
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.history-table th {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    color: #5eead4;
+    padding: 12px 10px;
+}
+.history-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 10px;
+    color: #cbd5e1;
+}
+</style>
+
+<script>
+let currentUser = null;
+
+// Auth check at load
+fetch('/api/check-auth')
+    .then(res => res.json())
+    .then(data => {
+        const authBox = document.getElementById("authBox");
+        if(data.authenticated) {
+            currentUser = data;
+            authBox.innerHTML = `
+                <span style="color:#5eead4; margin-right:15px; font-weight:600; font-size:14px;">Hi, ${data.user_name}</span>
+                <button class="signin-btn" style="border-color:#ef4444; color:#ef4444; background:transparent; cursor:pointer;" onclick="logout()">Sign Out</button>
+            `;
+        } else {
+            // Redirect unauthorized users to login
+            window.location.href = `/auth.html?redirect=${encodeURIComponent(window.location.pathname)}`;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = "/auth.html";
+    });
+
+function logout() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                window.location.href = "/auth.html";
+            }
+        });
+}
+
+// History handlers
+function showHistory() {
+    const modal = document.getElementById("historyModal");
+    modal.style.display = "flex";
+    const content = document.getElementById("historyContent");
+    content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">Loading logs...</p>';
+    
+    fetch('/api/history')
+        .then(res => res.json())
+        .then(data => {
+            if(!data || !data.success) return;
+            if(data.predictions.length === 0) {
+                content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">No report history logs found.</p>';
+                return;
+            }
+            
+            let html = '<table class="history-table">';
+            html += '<tr><th>Date</th><th>Module</th><th>Result</th><th>Confidence</th><th>Report</th></tr>';
+            data.predictions.forEach(p => {
+                const date = new Date(p.created_at).toLocaleString();
+                html += `<tr>
+                    <td>${date}</td>
+                    <td style="color:#36f3ff; font-weight:600;">${p.disease}</td>
+                    <td>${p.result}</td>
+                    <td style="color:#22c55e; font-weight:600;">${p.confidence}%</td>
+                    <td><a href="/api/report/${p.id}" target="_blank" style="color:#38bdf8; text-decoration:none; font-weight:700;">⬇ PDF</a></td>
+                </tr>`;
+            });
+            html += '</table>';
+            content.innerHTML = html;
+        });
+}
+
+function closeHistory() {
+    document.getElementById("historyModal").style.display = "none";
+}
+
+// Clear history
+function clearHistory() {
+    if(!confirm("Clear all your diagnostic history logs?")) return;
+    fetch('/api/history/clear', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showHistory();
+            }
+        });
+}
+</script>
+</html>

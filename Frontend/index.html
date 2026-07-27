@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CureGen - Smart Health Lab</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+/* 🔥 SAME 3D BACKGROUND */
+
+body{
+background:
+linear-gradient(rgba(2,6,23,0.85), rgba(2,6,23,0.85)),
+url("https://images.unsplash.com/photo-1579154204601-01588f351e67?auto=format&fit=crop&w=1600&q=80");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+color:white;
+overflow-x:hidden;
+}
+
+/* GLOW */
+
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at 20% 30%, rgba(0,255,200,0.35), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(0,200,255,0.35), transparent 40%),
+radial-gradient(circle at 50% 50%, rgba(0,255,150,0.2), transparent 50%);
+filter:blur(100px);
+animation:moveBg 8s infinite alternate;
+z-index:-2;
+}
+
+body::after{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:
+linear-gradient(120deg,rgba(0,255,200,0.08),transparent,rgba(0,200,255,0.08));
+z-index:-1;
+}
+
+@keyframes moveBg{
+0%{transform:translate(0,0) scale(1);}
+100%{transform:translate(-80px,-50px) scale(1.3);}
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:40px;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+position:relative;
+}
+
+.logo{
+position:absolute;
+left:40px;
+font-size:24px;
+font-weight:700;
+letter-spacing:2px;
+color:#36f3ff;
+text-shadow:0 0 10px #00eaff;
+}
+
+.navlinks a{
+margin:0 15px;
+color:#cbd5e1;
+font-size:14px;
+text-decoration:none;
+}
+
+.navlinks a.active{
+color:#22c55e;
+font-weight:600;
+}
+
+.navlinks a:hover{
+color:#00eaff;
+}
+
+/* BUTTONS */
+
+.auth{
+position:absolute;
+right:40px;
+}
+
+.auth button{
+margin-left:10px;
+padding:8px 18px;
+border-radius:10px;
+border:none;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+
+box-shadow:
+0 5px 15px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(0,255,255,0.2);
+}
+
+.signin{
+background:transparent;
+border:1px solid #00eaff;
+color:#00eaff;
+}
+
+.signup{
+background:linear-gradient(130deg,#00eaff,#00ffa6);
+color:black;
+}
+
+.auth button:hover{
+transform:translateY(-4px) scale(1.05);
+box-shadow:
+0 10px 25px rgba(0,255,200,0.7),
+0 0 15px rgba(0,234,255,0.5);
+}
+
+/* MAIN */
+
+.main{
+padding:50px;
+}
+
+/* HERO */
+
+.hero{
+text-align:center;
+margin-bottom:60px;
+}
+
+.hero h1{
+font-size:55px;
+color:#36f3ff;
+text-shadow:0 0 25px #00eaff;
+}
+
+.hero p{
+margin-top:15px;
+color:#cbd5e1;
+max-width:700px;
+margin:auto;
+}
+
+/* BUTTONS */
+
+.hero-buttons{
+margin-top:25px;
+}
+
+.hero-buttons button{
+padding:12px 26px;
+margin:10px;
+border-radius:10px;
+border:none;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,0.6),
+inset 0 0 10px rgba(0,255,255,0.2);
+}
+
+.try{
+background:linear-gradient(130deg,#22c55e,#00ffa6);
+color:black;
+}
+
+.features{
+background:#0ea5e9;
+color:white;
+}
+
+.hero-buttons button:hover{
+transform:translateY(-5px) scale(1.05);
+box-shadow:
+0 12px 30px rgba(0,255,200,0.7),
+0 0 15px rgba(0,234,255,0.5);
+}
+
+/* 🔥 ONLY CHANGE: GRID LAYOUT */
+
+.feature-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+gap:25px;
+margin-top:40px;
+}
+
+/* BOXES */
+
+.feature-card{
+padding:30px 20px;
+border-radius:20px;
+text-align:center;
+cursor:pointer;
+
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(12px);
+
+box-shadow:
+0 15px 35px rgba(0,0,0,0.6),
+inset 0 0 15px rgba(0,255,255,0.08);
+
+transition:0.3s;
+}
+
+.feature-card:hover{
+transform:translateY(-8px) scale(1.03);
+box-shadow:
+0 15px 30px rgba(0,255,200,0.4),
+0 0 15px rgba(0,234,255,0.3);
+background:linear-gradient(130deg,rgba(0,234,255,0.05),rgba(0,255,166,0.05));
+}
+
+.feature-card h3{
+margin: 15px 0 10px 0;
+color: #36f3ff;
+}
+
+.feature-card p{
+font-size: 13px;
+color: #9ca3af;
+line-height: 1.5;
+}
+
+.feature-card .icon{
+font-size: 32px;
+margin-bottom: 5px;
+}
+
+/* FOOTER */
+
+.footer{
+margin-top:80px;
+padding:40px;
+background:rgba(5,23,46,0.9);
+text-align:center;
+font-size:13px;
+color:#cbd5e1;
+}
+
+.footer h4{
+color:#36f3ff;
+margin-bottom:10px;
+}
+
+.footer p{
+margin:8px 0;
+line-height:1.5;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #020817, #0b1528);
+    border: 1px solid rgba(54, 243, 255, 0.3);
+    border-radius: 20px;
+    padding: 35px;
+    width: 750px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0, 234, 255, 0.25);
+    color: white;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    right: 22px;
+    top: 18px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: 0.2s;
+}
+
+.modal-close:hover {
+    color: #ef4444;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.history-table th {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    color: #5eead4;
+    padding: 12px 10px;
+}
+
+.history-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 10px;
+    color: #cbd5e1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">CureGen</div>
+
+<div class="navlinks">
+<a href="/index.html" class="active">Home</a>
+<a href="#diagnostics">Diagnosis</a>
+<a href="#about">About</a>
+</div>
+
+<div class="auth" id="authBox">
+<button class="signin" onclick="location.href='/auth.html'">Sign In</button>
+<button class="signup" onclick="location.href='/auth.html?mode=signup'">Sign Up</button>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="hero">
+
+<h1>CureGen AI</h1>
+
+<p>
+AI-powered multi-disease diagnostic platform for smart screening, real-time prediction insights, and automated medical reports.
+</p>
+
+<div class="hero-buttons">
+<button class="try" onclick="document.getElementById('diagnostics').scrollIntoView({behavior: 'smooth'})">Get Diagnosed</button>
+<button class="features" onclick="location.href='/chatbot.html'">Talk to AI Assistant</button>
+</div>
+
+</div>
+
+<h2 id="diagnostics" style="color:#36f3ff; text-align:center; margin: 40px 0 10px 0;">Our Diagnostic Modules</h2>
+<p style="text-align:center; color:#cbd5e1; margin-bottom: 20px;">Select a screening module to analyze images or enter clinical parameters</p>
+
+<div class="feature-grid">
+
+<div class="feature-card" onclick="goToModule('/brain-tumor.html')">
+    <div class="icon">🧠</div>
+    <h3>Brain Tumor Detection</h3>
+    <p>Identifies tumors (glioma, meningioma, pituitary) using MRI/CT scan analysis.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/eye.html')">
+    <div class="icon">👁</div>
+    <h3>Eye Cataract Detection</h3>
+    <p>Detects cataract presence and severity grade through eye fundus imaging.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/heart.html')">
+    <div class="icon">❤️</div>
+    <h3>Heart Attack Risk</h3>
+    <p>Evaluates cardiac arrest risk level using clinical vitals or ECG scans.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/lungs.html')">
+    <div class="icon">🫁</div>
+    <h3>Lung Disease Detection</h3>
+    <p>Analyzes chest X-rays for pneumonia, effusion, and lung abnormalities.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/skin-cancer.html')">
+    <div class="icon">🔬</div>
+    <h3>Skin Cancer Screening</h3>
+    <p>Analyzes skin lesions to detect early-stage melanomas and benign moles.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/sugar-level.html')">
+    <div class="icon">🩸</div>
+    <h3>Diabetes Risk Assessment</h3>
+    <p>Predicts glycemic disorders and diabetic risks using clinical vitals.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/blood-pressure.html')">
+    <div class="icon">🩺</div>
+    <h3>Blood Pressure Tracker</h3>
+    <p>Categorizes BP levels and guides hypertensive crisis warnings.</p>
+</div>
+
+<div class="feature-card" onclick="showHistory()">
+    <div class="icon">📄</div>
+    <h3>PDF Reports & History</h3>
+    <p>Access your previous diagnosis logs and download official PDF medical reports.</p>
+</div>
+
+<div class="feature-card" onclick="goToModule('/hospital.html')">
+    <div class="icon">🏥</div>
+    <h3>Top Hospital Finder</h3>
+    <p>Find trusted local hospital networks, addresses, and helpline numbers.</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="footer" id="about">
+
+<h4>CureGen AI Medical Diagnostic Platform</h4>
+
+<p>
+Preliminary AI-powered healthcare assistant. Trained on specialized clinical datasets.
+</p>
+
+<p style="color: #f87171;">
+⚠️ <b>Disclaimer:</b> Not a substitute for professional medical advice. Consult a medical practitioner for formal diagnostics.
+</p>
+
+<p>
+© 2026 CureGen Technologies. All Rights Reserved.
+</p>
+
+</div>
+
+<!-- PDF REPORTS HISTORY MODAL -->
+<div id="historyModal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeHistory()">✕</span>
+    <h2 style="color:#36f3ff; margin-bottom:10px; text-shadow:0 0 10px rgba(0,234,255,0.3);">📄 Your Diagnostic History</h2>
+    <p style="color:#9ca3af; font-size:13px; margin-bottom:20px;">Download official PDF reports or manage previous AI screening sessions.</p>
+    
+    <div id="historyContent" style="min-height: 150px; max-height: 40vh; overflow-y: auto;">
+        Loading report logs...
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; margin-top:30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:20px;">
+      <button onclick="clearHistory()" style="padding:10px 16px; background:#ef4444; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Clear All Logs</button>
+      <button onclick="closeHistory()" style="padding:10px 16px; background:#334155; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentUser = null;
+
+// Auth check on startup
+fetch('/api/check-auth')
+    .then(res => res.json())
+    .then(data => {
+        const authBox = document.getElementById("authBox");
+        if(data.authenticated) {
+            currentUser = data;
+            authBox.innerHTML = `
+                <span style="color:#5eead4; margin-right:15px; font-weight:600;">Welcome, ${data.user_name}</span>
+                <button class="signin" style="border-color:#ef4444; color:#ef4444;" onclick="logout()">Sign Out</button>
+            `;
+        } else {
+            currentUser = null;
+        }
+    })
+    .catch(err => console.error("Error checking auth status:", err));
+
+function logout() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                window.location.reload();
+            }
+        });
+}
+
+function goToModule(path) {
+    if(!currentUser) {
+        // Redirect to login page and return back to this page
+        window.location.href = `/auth.html?redirect=${encodeURIComponent(path)}`;
+    } else {
+        window.location.href = path;
+    }
+}
+
+// History modal handlers
+function showHistory() {
+    if(!currentUser) {
+        window.location.href = `/auth.html?redirect=/index.html`;
+        return;
+    }
+    const modal = document.getElementById("historyModal");
+    modal.style.display = "flex";
+    const content = document.getElementById("historyContent");
+    content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:30px;">Loading history data...</p>';
+    
+    fetch('/api/history')
+        .then(res => {
+            if(res.status === 401) {
+                window.location.href = "/auth.html";
+                return;
+            }
+            return res.json();
+        })
+        .then(data => {
+            if(!data || !data.success) return;
+            if(data.predictions.length === 0) {
+                content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:30px;">No diagnostic reports found in this account.</p>';
+                return;
+            }
+            
+            let html = '<table class="history-table">';
+            html += '<tr><th>Date</th><th>Screening Module</th><th>Analysis Result</th><th>Confidence</th><th>Report</th></tr>';
+            
+            data.predictions.forEach(p => {
+                const date = new Date(p.created_at).toLocaleString();
+                html += `<tr>
+                    <td>${date}</td>
+                    <td style="color:#36f3ff; font-weight:600;">${p.disease}</td>
+                    <td>${p.result}</td>
+                    <td style="color:#22c55e; font-weight:600;">${p.confidence}%</td>
+                    <td><a href="/api/report/${p.id}" target="_blank" style="color:#38bdf8; text-decoration:none; font-weight:700;">⬇ PDF</a></td>
+                </tr>`;
+            });
+            html += '</table>';
+            content.innerHTML = html;
+        })
+        .catch(err => {
+            console.error(err);
+            content.innerHTML = '<p style="color:#ef4444; text-align:center; padding:30px;">Failed to load history logs.</p>';
+        });
+}
+
+function closeHistory() {
+    document.getElementById("historyModal").style.display = "none";
+}
+
+function clearHistory() {
+    if(!confirm("Are you sure you want to clear your prediction history logs permanently?")) return;
+    fetch('/api/history/clear', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showHistory();
+            } else {
+                alert("Failed to clear logs.");
+            }
+        });
+}
+</script>
+
+</body>
+</html>

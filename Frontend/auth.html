@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen AI – Login / Register</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 10% 10%, rgba(0,255,200,0.15), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(0,200,255,0.15), transparent 40%),
+      linear-gradient(120deg,#020617,#041a2d,#020617);
+    color: white;
+}
+
+.auth-box{
+    width:420px;
+    padding:40px 35px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border:1px solid rgba(255,255,255,0.1);
+    color:#fff;
+    box-shadow:
+        0 15px 35px rgba(0,0,0,0.6),
+        0 0 25px rgba(0,234,255,0.15);
+}
+
+.auth-box h2{
+    text-align:center;
+    margin-bottom:6px;
+    font-weight:700;
+    color: #36f3ff;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+}
+
+.subtitle{
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+    margin-bottom:26px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    font-size:12px;
+    color:#cbd5e1;
+    font-weight: 600;
+}
+
+.input-group input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.08);
+    margin-top:6px;
+    outline:none;
+    background:rgba(15, 23, 42, 0.6);
+    color:white;
+    transition:0.2s;
+}
+
+.input-group input::placeholder{
+    color:#6b7280;
+}
+
+.input-group input:focus{
+    border-color:#22c55e;
+    box-shadow:0 0 0 3px rgba(34, 197, 94, 0.25);
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(120deg,#22c55e,#4ade80);
+    color:black;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:10px;
+    transition:0.25s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(34, 197, 94, 0.45);
+}
+
+.switch{
+    margin-top:20px;
+    text-align:center;
+    font-size:13px;
+    color:#9ca3af;
+}
+
+.switch span{
+    color:#36f3ff;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.switch span:hover{
+    text-decoration:underline;
+}
+
+.hidden{
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="auth-box">
+
+    <!-- SIGN IN -->
+    <div id="loginBox">
+
+        <h2>CureGen AI</h2>
+        <div class="subtitle">Sign in to access medical diagnostics</div>
+
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" id="loginEmail" placeholder="name@example.com">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••">
+        </div>
+
+        <button onclick="login()">Sign In</button>
+
+        <div class="switch">
+            Don’t have an account?
+            <span onclick="showRegister()">Sign up</span>
+        </div>
+
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="registerBox" class="hidden">
+
+        <h2>CureGen AI</h2>
+        <div class="subtitle">Create your account for full screening reports</div>
+
+        <div class="input-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" placeholder="Your name">
+        </div>
+
+        <div class="input-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" placeholder="name@example.com">
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" placeholder="Minimum 6 characters">
+        </div>
+
+        <button onclick="register()">Create Account</button>
+
+        <div class="switch">
+            Already have an account?
+            <span onclick="showLogin()">Sign in</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+// Check if URL specifies register mode
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('mode') === 'signup') {
+    showRegister();
+}
+
+function showRegister(){
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("registerBox").classList.remove("hidden");
+}
+
+function showLogin(){
+    document.getElementById("registerBox").classList.add("hidden");
+    document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function login(){
+    const email = document.getElementById("loginEmail").value;
+    const pass  = document.getElementById("loginPassword").value;
+
+    if(email==="" || pass===""){
+        alert("Please enter email and password");
+        return;
+    }
+
+    fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, password: pass })
+    }).then(res => res.json()).then(data => {
+        if(data.success){
+            const redirectUrl = urlParams.get('redirect') || "/index.html";
+            window.location.href = redirectUrl;
+        }else{
+            alert(data.error || "Login failed");
+        }
+    }).catch(err => {
+        console.error(err);
+        alert("Server error during login.");
+    });
+}
+
+function register(){
+    const name  = document.getElementById("regName").value;
+    const email = document.getElementById("regEmail").value;
+    const pass  = document.getElementById("regPassword").value;
+
+    if(name==="" || email==="" || pass===""){
+        alert("Please fill all fields");
+        return;
+    }
+
+    fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name, email: email, password: pass })
+    }).then(res => res.json()).then(data => {
+        if(data.success){
+            alert("Account created successfully! Please sign in.");
+            showLogin();
+        }else{
+            alert(data.error || "Registration failed");
+        }
+    }).catch(err => {
+        console.error(err);
+        alert("Server error during registration.");
+    });
+}
+</script>
+
+</body>
+</html>

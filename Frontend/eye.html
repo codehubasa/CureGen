@@ -1,0 +1,531 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen Eye Cataract Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
+
+body{
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.25), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+}
+
+.logo{font-size:26px;font-weight:700;color:#36f3ff;}
+
+/* LAYOUT */
+
+.container-layout{display:flex;}
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{margin-top:25px;color:#5eead4;}
+
+.menu-card{
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+transition:.3s;
+}
+
+.menu-card:hover{
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+color:black;
+}
+
+/* MAIN */
+
+.main{flex:1;padding:40px;}
+
+.container{width:950px;max-width:100%;margin:auto;}
+
+h1{color:#36f3ff;text-align:center;margin-bottom:6px;}
+.sub{text-align:center;color:#9ca3af;margin-bottom:35px;}
+
+.section-title{color:#36f3ff;margin-bottom:14px;font-weight:600;}
+
+.scan-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;margin-bottom:35px;
+}
+
+.scan-card{
+background:rgba(255,255,255,.08);
+border-radius:16px;
+padding:24px;
+text-align:center;
+cursor:pointer;
+border:2px solid transparent;
+}
+
+.scan-card.active{
+border-color:#22c55e;
+}
+
+/* UPLOAD */
+
+.upload-box{
+background:rgba(255,255,255,.08);
+border-radius:18px;
+padding:60px 20px;
+text-align:center;
+border:2px dashed #22c55e;
+}
+
+.upload-box p{color:#cbd5e1;margin-top:6px;}
+
+.preview{
+margin-top:20px;
+text-align:center;
+}
+
+.preview img{
+width:200px;
+border-radius:10px;
+border:2px solid #22c55e;
+}
+
+/* BUTTON */
+
+.detect-btn{
+margin-top:30px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(120deg,#22c55e,#4ade80);
+}
+
+/* RESULT CARD */
+
+.result-card{
+margin-top:40px;
+padding:30px;
+border-radius:18px;
+background:rgba(255,255,255,0.06);
+}
+
+.result-title{
+color:#4ade80;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.bar{
+height:10px;
+border-radius:8px;
+background:#1e293b;
+overflow:hidden;
+margin:6px 0 14px 0;
+}
+
+.bar span{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#38bdf8,#22c55e);
+}
+
+.download-btn{
+margin-top:20px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:#0ea5e9;
+color:white;
+cursor:pointer;
+}
+
+.hidden{display:none;}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo" style="cursor:pointer;" onclick="location.href='/index.html'">CureGen</div>
+<div id="authBox" style="display:flex; align-items:center;"></div>
+</div>
+
+<div class="container-layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/brain-tumor.html'">🧠 Brain Tumor</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/skin-cancer.html'">🔬 Skin Cancer</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/heart.html'">❤️ Heart Attack</div>
+<div class="menu-card active" style="cursor:pointer;" onclick="location.href='/eye.html'">👁 Eye Cataract</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/lungs.html'">🫁 Lung Disease</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/blood-pressure.html'">🩺 BP Detection</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/sugar-level.html'">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card" style="cursor:pointer;" onclick="showHistory()">📄 PDF Reports</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/hospital.html'">🏥 Top Hospitals</div>
+<div class="menu-card" style="cursor:pointer;" onclick="location.href='/chatbot.html'">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="container">
+
+<h1>Eye Cataract Detection</h1>
+<div class="sub">Upload retinal fundus image for cataract severity detection</div>
+
+<div class="section-title">Step 1 — Select Scan Type</div>
+
+<div class="scan-grid">
+
+<div class="scan-card active" onclick="selectScan('fundus')" id="fundus">
+👁 Fundus Photo
+</div>
+
+<div class="scan-card" onclick="selectScan('slit')" id="slit">
+💡 Slit-Lamp Image
+</div>
+
+</div>
+
+<div class="section-title">Step 2 — Upload Eye Image</div>
+
+<div class="upload-box" id="dropArea">
+
+<h3>Upload retinal or slit-lamp photograph</h3>
+<p>Drag & Drop / Click / Paste Image</p>
+
+<input type="file" id="fileInput" accept="image/*">
+
+</div>
+
+<div class="preview" id="preview"></div>
+
+<button class="detect-btn" onclick="runAI()">🔎 Click Here to Detect</button>
+
+<!-- RESULT -->
+
+<div class="result-card hidden" id="result">
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- PDF REPORTS HISTORY MODAL -->
+<div id="historyModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(2,6,23,0.85); backdrop-filter:blur(8px); justify-content:center; align-items:center;">
+  <div style="background:linear-gradient(135deg, #020817, #0b1528); border:1px solid rgba(54,243,255,0.3); border-radius:20px; padding:35px; width:750px; max-width:90%; max-height:80vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0, 234, 255, 0.25); color:white; position:relative;">
+    <span style="position:absolute; right:22px; top:18px; font-size:24px; cursor:pointer; color:#9ca3af; transition:0.2s;" onclick="closeHistory()">✕</span>
+    <h2 style="color:#36f3ff; margin-bottom:10px; text-shadow:0 0 10px rgba(0,234,255,0.3);">📄 Your Diagnostic History</h2>
+    <p style="color:#9ca3af; font-size:13px; margin-bottom:20px;">Download official PDF reports or manage previous AI screening sessions.</p>
+    <div id="historyContent" style="min-height: 150px; max-height: 40vh; overflow-y: auto;">
+        Loading report logs...
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:30px; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px;">
+      <button onclick="clearHistory()" style="padding:10px 16px; background:#ef4444; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Clear All Logs</button>
+      <button onclick="closeHistory()" style="padding:10px 16px; background:#334155; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Close</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* CSS styles for active sidebar and navbar signout */
+.menu-card.active {
+    background: linear-gradient(120deg,#00eaff,#00ffa6);
+    color: black;
+    font-weight: 600;
+}
+.signin-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #36f3ff;
+    background: transparent;
+    color: #36f3ff;
+    cursor: pointer;
+    font-weight: 600;
+}
+.signin-btn:hover {
+    background: rgba(54, 243, 255, 0.1);
+}
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px;
+}
+.history-table th {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+    color: #5eead4;
+    padding: 12px 10px;
+}
+.history-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 10px;
+    color: #cbd5e1;
+}
+</style>
+
+<script>
+let currentUser = null;
+
+// Auth check at load
+fetch('/api/check-auth')
+    .then(res => res.json())
+    .then(data => {
+        const authBox = document.getElementById("authBox");
+        if(data.authenticated) {
+            currentUser = data;
+            authBox.innerHTML = `
+                <span style="color:#5eead4; margin-right:15px; font-weight:600; font-size:14px;">Hi, ${data.user_name}</span>
+                <button class="signin-btn" style="border-color:#ef4444; color:#ef4444;" onclick="logout()">Sign Out</button>
+            `;
+        } else {
+            // Redirect unauthorized users to login
+            window.location.href = `/auth.html?redirect=${encodeURIComponent(window.location.pathname)}`;
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        window.location.href = "/auth.html";
+    });
+
+function logout() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                window.location.href = "/auth.html";
+            }
+        });
+}
+
+let imageData=null;
+
+function selectScan(type){
+    document.getElementById("fundus").classList.remove("active");
+    document.getElementById("slit").classList.remove("active");
+    document.getElementById(type).classList.add("active");
+}
+
+/* FILE INPUT */
+const fileInput=document.getElementById("fileInput");
+const preview=document.getElementById("preview");
+
+fileInput.addEventListener("change",e=>{
+    if(e.target.files.length > 0) {
+        loadImage(e.target.files[0]);
+    }
+});
+
+/* DRAG DROP */
+const dropArea=document.getElementById("dropArea");
+dropArea.addEventListener("dragover",e=>{
+    e.preventDefault();
+});
+
+dropArea.addEventListener("drop",e=>{
+    e.preventDefault();
+    if(e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        loadImage(e.dataTransfer.files[0]);
+    }
+});
+
+/* CLICK */
+dropArea.addEventListener("click",()=>{
+    fileInput.click();
+});
+
+/* PASTE IMAGE */
+window.addEventListener("paste",e=>{
+    const items=e.clipboardData.items;
+    for(let item of items){
+        if(item.type.indexOf("image")!==-1){
+            const file=item.getAsFile();
+            loadImage(file);
+        }
+    }
+});
+
+/* LOAD IMAGE */
+function loadImage(file){
+    const reader=new FileReader();
+    reader.onload=function(e){
+        imageData=e.target.result;
+        preview.innerHTML=`<img src="${imageData}">`;
+    }
+    reader.readAsDataURL(file);
+}
+
+/* RUN AI */
+function runAI(){
+    if(!imageData){
+        alert("Please upload or paste an eye image first.");
+        return;
+    }
+
+    const detectBtn = document.querySelector(".detect-btn");
+    detectBtn.disabled = true;
+    detectBtn.innerText = "Analyzing eye scan...";
+
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    
+    if (file) {
+        formData.append('image', file);
+        sendPrediction(formData);
+    } else {
+        // Handle pasted/dropped images
+        fetch(imageData)
+            .then(res => res.blob())
+            .then(blob => {
+                formData.append('image', blob, 'scan.jpg');
+                sendPrediction(formData);
+            });
+    }
+}
+
+function sendPrediction(formData) {
+    const scanType = document.getElementById("fundus").classList.contains("active") ? "fundus" : "slit";
+    formData.append('scan_type', scanType);
+
+    fetch('/api/predict/eye', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => {
+        if(res.status === 401) {
+            window.location.href = "/auth.html";
+            return;
+        }
+        return res.json();
+    })
+    .then(data => {
+        const detectBtn = document.querySelector(".detect-btn");
+        detectBtn.disabled = false;
+        detectBtn.innerText = "🔎 Click Here to Detect";
+
+        if(data && data.success) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.classList.remove("hidden");
+            resultDiv.innerHTML = `
+                <div class="result-title" style="color: #4ade80;">✅ Eye Analysis Complete</div>
+                <p style="margin-bottom: 10px;"><b>Diagnostic Conclusion:</b> ${data.result}</p>
+                
+                <p>Cataract Severity: <b>${data.severity}%</b></p>
+                <div class="bar"><span style="width:${data.severity}%"></span></div>
+                
+                <p>Vision Clarity Remaining: <b>${data.remaining_clarity}%</b></p>
+                <div class="bar"><span style="width:${data.remaining_clarity}%"></span></div>
+                
+                <p style="margin-top: 15px;"><b>Cataract Type:</b> ${data.cataract_type}</p>
+                <p><b>LOCS III Grade:</b> Grade ${data.grade} / 5</p>
+                <p><b>Surgery Required:</b> ${data.surgery_required}</p>
+                <p><b>Confidence Score:</b> ${data.confidence}%</p>
+                
+                <button class="download-btn" onclick="location.href='/api/report/${data.prediction_id}'">⬇ Download Report PDF</button>
+            `;
+            resultDiv.scrollIntoView({behavior: 'smooth'});
+        } else {
+            alert(data.error || "Prediction failed.");
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        const detectBtn = document.querySelector(".detect-btn");
+        detectBtn.disabled = false;
+        detectBtn.innerText = "🔎 Click Here to Detect";
+        alert("Server communication error.");
+    });
+}
+
+// History handlers
+function showHistory() {
+    const modal = document.getElementById("historyModal");
+    modal.style.display = "flex";
+    const content = document.getElementById("historyContent");
+    content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">Loading logs...</p>';
+    
+    fetch('/api/history')
+        .then(res => res.json())
+        .then(data => {
+            if(!data || !data.success) return;
+            if(data.predictions.length === 0) {
+                content.innerHTML = '<p style="color:#9ca3af; text-align:center; padding:20px;">No report history logs found.</p>';
+                return;
+            }
+            
+            let html = '<table class="history-table">';
+            html += '<tr><th>Date</th><th>Module</th><th>Result</th><th>Confidence</th><th>Report</th></tr>';
+            data.predictions.forEach(p => {
+                const date = new Date(p.created_at).toLocaleString();
+                html += `<tr>
+                    <td>${date}</td>
+                    <td style="color:#36f3ff; font-weight:600;">${p.disease}</td>
+                    <td>${p.result}</td>
+                    <td style="color:#22c55e; font-weight:600;">${p.confidence}%</td>
+                    <td><a href="/api/report/${p.id}" target="_blank" style="color:#38bdf8; text-decoration:none; font-weight:700;">⬇ PDF</a></td>
+                </tr>`;
+            });
+            html += '</table>';
+            content.innerHTML = html;
+        });
+}
+
+function closeHistory() {
+    document.getElementById("historyModal").style.display = "none";
+}
+
+function clearHistory() {
+    if(!confirm("Clear all your diagnostic history logs?")) return;
+    fetch('/api/history/clear', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showHistory();
+            }
+        });
+}
+</script>
+
+</body>
+</html>
+```
