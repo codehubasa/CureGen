@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen AI Chatbot</title>
+
+<style>
+
+body{
+font-family:Segoe UI;
+background:#020617;
+}
+
+.chat-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:linear-gradient(135deg,#00eaff,#22c55e);
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+box-shadow:0 12px 30px rgba(0,255,200,.6);
+font-size:26px;
+}
+
+.chatbox{
+position:fixed;
+bottom:90px;
+right:20px;
+width:380px;
+height:520px;
+background:linear-gradient(160deg,#022c43,#0369a1,#16a34a);
+border-radius:16px;
+display:none;
+flex-direction:column;
+box-shadow:0 35px 80px rgba(0,0,0,.95);
+}
+
+.chat-header{
+display:flex;
+justify-content:space-between;
+padding:14px;
+font-weight:bold;
+border-bottom:1px solid rgba(255,255,255,.2);
+}
+
+.chat-body{
+flex:1;
+padding:12px;
+overflow-y:auto;
+font-size:14px;
+}
+
+.message{margin:10px 0;}
+.bot{color:#a7f3d0;}
+.user{text-align:right;color:white;}
+
+.chat-input{
+display:flex;
+border-top:1px solid rgba(255,255,255,.2);
+}
+
+.chat-input input{
+flex:1;
+padding:12px;
+border:none;
+background:#041a2d;
+color:white;
+outline:none;
+}
+
+.chat-input button{
+padding:12px;
+border:none;
+background:#22c55e;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="chat-btn" onclick="toggleChat()">💬</div>
+
+<div class="chatbox" id="chatbox">
+
+<div class="chat-header">
+CureGen Assistant
+<span onclick="toggleChat()">✖</span>
+</div>
+
+<div class="chat-body" id="chatBody">
+
+<div class="message bot">
+👋 <b>Welcome to CureGen AI Assistant</b><br><br>
+
+Enter a number or ask directly:<br><br>
+
+1️⃣ Core Diagnostics<br>
+2️⃣ Guidance System<br>
+3️⃣ How CureGen Works<br>
+4️⃣ Detection Methods<br>
+5️⃣ Top Hospitals<br>
+6️⃣ Reports & PDF<br>
+0️⃣ Show Menu
+
+</div>
+
+</div>
+
+<div class="chat-input">
+<input id="userInput" placeholder="Type or enter number...">
+<button onclick="sendMessage()">➤</button>
+</div>
+
+</div>
+
+<script>
+
+/* TOGGLE */
+function toggleChat(){
+let box=document.getElementById("chatbox");
+box.style.display = box.style.display==="flex" ? "none" : "flex";
+}
+
+/* ENTER */
+document.getElementById("userInput").addEventListener("keydown",function(e){
+if(e.key==="Enter") sendMessage();
+});
+
+/* SEND */
+function sendMessage(){
+
+let input=document.getElementById("userInput");
+let msg=input.value.trim().toLowerCase();
+
+if(msg==="") return;
+
+addMessage(msg,"user");
+input.value="";
+
+setTimeout(()=>{
+addMessage("Typing...", "bot-temp");
+},200);
+
+setTimeout(()=>{
+removeTyping();
+let reply=getReply(msg);
+addMessage(reply,"bot");
+},800);
+
+}
+
+/* ADD MESSAGE */
+function addMessage(text,type){
+
+let div=document.createElement("div");
+
+if(type==="bot-temp"){
+div.id="typing";
+div.className="message bot";
+}else{
+div.className="message "+type;
+}
+
+div.innerHTML=text;
+document.getElementById("chatBody").appendChild(div);
+document.getElementById("chatBody").scrollTop=9999;
+
+}
+
+/* REMOVE */
+function removeTyping(){
+let t=document.getElementById("typing");
+if(t) t.remove();
+}
+
+/* ================= ULTRA DETAILED RESPONSES ================= */
+
+function getReply(msg){
+
+/* MAIN OPTIONS */
+
+if(msg==="1")
+return "🧠 <b>Core Diagnostics</b><br><br>\
+CureGen provides AI-powered diagnostic systems designed for early detection of major diseases:<br><br>\
+<b>• Brain Tumor Detection</b> – Uses MRI scans to identify abnormal brain tissues<br>\
+<b>• Skin Cancer Detection</b> – Classifies skin lesions as benign or malignant<br>\
+<b>• Lung Disease Detection</b> – Uses chest X-rays to detect pneumonia and infections<br>\
+<b>• Heart Attack Prediction</b> – Predicts cardiovascular risk using patient data<br>\
+<b>• Eye Cataract Detection</b> – Detects cataract formation using eye images<br><br>\
+👉 These systems help in faster diagnosis and better medical decisions.";
+
+if(msg==="2")
+return "🩺 <b>Guidance System</b><br><br>\
+CureGen also focuses on preventive healthcare using smart monitoring tools:<br><br>\
+<b>• BP Detection</b> – Classifies blood pressure levels<br>\
+<b>• Sugar Detection</b> – Predicts diabetes risk<br>\
+<b>• Pregnancy Guidance</b> – Provides maternal health insights<br>\
+<b>• Child Health Monitoring</b> – Tracks development and general health<br><br>\
+👉 Helps prevent diseases before they become serious.";
+
+if(msg==="3")
+return "⚙ <b>How CureGen Works</b><br><br>\
+1 Upload medical data or scan image<br>\
+2 AI processes the input<br>\
+3 Pattern recognition is applied<br>\
+4 Disease prediction is generated<br>\
+5 Results are displayed with insights<br>\
+6 PDF report is generated<br>\
+7 Hospitals are suggested<br><br>\
+👉 Fully automated and user-friendly system.";
+
+if(msg==="4")
+return "🔬 <b>Detection Methods</b><br><br>\
+CureGen uses advanced AI techniques:<br><br>\
+• Deep Learning (CNN for image analysis)<br>\
+• Machine Learning (prediction models)<br>\
+• Image Processing (enhancing medical images)<br>\
+• Pattern Recognition (detecting disease features)<br><br>\
+👉 Ensures high accuracy and reliability.";
+
+if(msg==="5")
+return "🏥 <b>Top Hospitals</b><br><br>\
+CureGen recommends trusted hospitals across India:<br><br>\
+• Apollo Hospitals (Chennai)<br>\
+• AIIMS (Delhi)<br>\
+• Fortis Hospitals<br>\
+• Medica Superspecialty Hospital (Kolkata)<br>\
+• Narayana Health (Bangalore)<br><br>\
+👉 Users can consult specialists after diagnosis.";
+
+if(msg==="6")
+return "📄 <b>Medical Reports</b><br><br>\
+Generated reports include:<br><br>\
+• Patient input details<br>\
+• Diagnosis results<br>\
+• Risk level classification<br>\
+• Health insights<br>\
+• Recommendations<br><br>\
+👉 Reports can be downloaded and shared with doctors.";
+
+/* DETAILED SPECIFIC */
+
+if(msg.includes("brain"))
+return "🧠 <b>Brain Tumor Detection</b><br><br>\
+Uses MRI scan images with deep learning models to detect abnormal brain tissue growth.<br><br>\
+<b>Process:</b><br>\
+• Image preprocessing<br>\
+• Feature extraction<br>\
+• Tumor classification<br><br>\
+<b>Output:</b><br>\
+• Tumor probability<br>\
+• Severity level<br>\
+• Recommendations<br><br>\
+👉 Early detection improves treatment success.";
+
+if(msg.includes("lung"))
+return "🫁 <b>Lung Disease Detection</b><br><br>\
+Uses chest X-ray images to detect pneumonia and infections.<br><br>\
+<b>Process:</b><br>\
+• Image enhancement<br>\
+• Pattern detection<br>\
+• Disease classification<br><br>\
+<b>Output:</b><br>\
+• Disease probability<br>\
+• Risk level<br>\
+• Recommendations<br><br>\
+👉 Helps in early respiratory diagnosis.";
+
+if(msg.includes("bp"))
+return "🩺 <b>Blood Pressure Detection</b><br><br>\
+Analyzes systolic and diastolic values.<br><br>\
+<b>Classification:</b><br>\
+• Normal<br>\
+• Elevated<br>\
+• Hypertension Stage 1<br>\
+• Hypertension Stage 2<br><br>\
+👉 Helps maintain heart health.";
+
+if(msg.includes("why"))
+return "🌟 <b>Why Use CureGen?</b><br><br>\
+• Early disease detection<br>\
+• Fast AI-based analysis<br>\
+• Accurate predictions<br>\
+• Easy to use<br>\
+• Preventive healthcare support<br><br>\
+👉 Helps users make better health decisions.";
+
+return "🤖 Please enter a valid option (1–6) or ask about any disease.";
+
+}
+
+</script>
+
+</body>
+</html>

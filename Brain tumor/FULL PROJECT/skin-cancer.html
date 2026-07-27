@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen Skin Cancer Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+body{
+
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.25), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+
+color:white;
+
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#36f3ff;
+text-shadow:0 0 12px #00eaff;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{
+margin-top:25px;
+color:#5eead4;
+}
+
+.menu-card{
+
+display:flex;
+align-items:center;
+gap:12px;
+
+background:rgba(255,255,255,0.05);
+
+padding:14px;
+
+border-radius:14px;
+
+margin-bottom:12px;
+
+transition:0.35s;
+
+}
+
+.menu-card:hover{
+background:linear-gradient(130deg,#00eaff,#00ffa6);
+color:black;
+transform:scale(1.04);
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:60px;
+}
+
+.container2{
+width:1000px;
+max-width:100%;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:#36f3ff;
+margin-bottom:8px;
+}
+
+.sub{
+text-align:center;
+color:#9ca3af;
+margin-bottom:35px;
+}
+
+.section-title{
+color:#36f3ff;
+margin-bottom:18px;
+font-size:18px;
+font-weight:600;
+}
+
+/* 3D SCAN BOXES */
+
+.scan-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:30px;
+margin-bottom:40px;
+}
+
+.scan-card{
+background:linear-gradient(145deg,#061a2b,#0b2a3d);
+border-radius:22px;
+padding:45px 30px;
+text-align:center;
+cursor:pointer;
+transition:.35s;
+border:1px solid rgba(0,255,200,0.25);
+box-shadow:
+0 20px 40px rgba(0,0,0,.85),
+inset 0 2px 4px rgba(255,255,255,.08),
+inset 0 -10px 18px rgba(0,0,0,.8);
+}
+
+.scan-card:hover{
+transform:translateY(-10px) scale(1.02);
+box-shadow:
+0 30px 60px rgba(0,0,0,.95),
+0 0 30px rgba(0,255,200,.35);
+}
+
+.scan-card.active{
+background:linear-gradient(160deg,#00eaff,#22c55e,#15803d);
+box-shadow:
+0 35px 70px rgba(0,0,0,.95),
+0 0 45px rgba(34,197,94,.75);
+}
+
+.scan-card .icon{
+font-size:40px;
+margin-bottom:15px;
+}
+
+/* UPLOAD BOX */
+
+.upload-box{
+background:linear-gradient(145deg,#071e2e,#0d3148);
+border-radius:22px;
+padding:65px 30px;
+text-align:center;
+border:2px dashed rgba(34,197,94,.6);
+box-shadow:
+0 22px 50px rgba(0,0,0,.9),
+inset 0 2px 5px rgba(255,255,255,.1),
+inset 0 -10px 20px rgba(0,0,0,.8);
+}
+
+.upload-box input{display:none;}
+
+.preview-grid{
+margin-top:18px;
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.preview-grid img{
+width:95px;
+height:95px;
+object-fit:cover;
+border-radius:10px;
+border:2px solid #22c55e;
+box-shadow:0 10px 20px rgba(0,0,0,.8);
+}
+
+/* BUTTON */
+
+.ai-btn{
+margin-top:35px;
+padding:16px 40px;
+border:none;
+border-radius:14px;
+background:linear-gradient(160deg,#00eaff,#22c55e);
+color:white;
+font-weight:600;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 15px 35px rgba(34,197,94,.6);
+}
+
+/* RESULT PANEL */
+
+.ai-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.ai-box{
+width:420px;
+background:linear-gradient(160deg,#041a2d,#0b2f45,#15803d);
+border-radius:18px;
+padding:35px;
+text-align:center;
+box-shadow:0 35px 80px rgba(0,0,0,.95);
+}
+
+.result-thumb{
+width:100px;
+height:100px;
+border-radius:10px;
+margin-top:12px;
+border:2px solid #22c55e;
+}
+
+.download-btn{
+margin-top:18px;
+padding:12px 22px;
+border:none;
+border-radius:8px;
+background:linear-gradient(180deg,#22c55e,#15803d);
+color:white;
+cursor:pointer;
+}
+
+.hidden{display:none;}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">CureGen</div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card">🧠 Brain Tumor Detection</div>
+<div class="menu-card">🔬 Skin Cancer Detection</div>
+<div class="menu-card">❤️ Heart Attack Prediction</div>
+<div class="menu-card">👁 Eye Cataract Detection</div>
+<div class="menu-card">🫁 Lung Disease Detection</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">🩺 BP Detection</div>
+<div class="menu-card">🩸 Sugar Detection</div>
+<div class="menu-card">🤰 Pregnancy Guidance</div>
+<div class="menu-card">👶 Child Health Guide</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">🔐 Authentication</div>
+<div class="menu-card">📄 PDF Reports</div>
+<div class="menu-card">🏥 Top Hospitals</div>
+<div class="menu-card">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="container2">
+
+<h1>Skin Cancer Detection</h1>
+<div class="sub">Upload skin lesion images for AI analysis</div>
+
+<div class="section-title">Select Image Type</div>
+
+<div class="scan-grid">
+
+<div class="scan-card active" onclick="selectType(this)">
+<div class="icon">🔬</div>
+<h3>Dermoscopic Image</h3>
+<p>High resolution dermatoscope skin lesion image</p>
+</div>
+
+<div class="scan-card" onclick="selectType(this)">
+<div class="icon">📷</div>
+<h3>Clinical Photo</h3>
+<p>Standard camera image of skin lesion</p>
+</div>
+
+</div>
+
+<div class="section-title">Upload Skin Image</div>
+
+<div class="upload-box">
+
+<h3>Drop skin images here</h3>
+
+<p>or <span style="color:#22c55e;cursor:pointer" onclick="fileInput.click()">browse files</span></p>
+
+<input type="file" id="fileInput" multiple accept="image/*">
+
+</div>
+
+<div id="previewGrid" class="preview-grid"></div>
+
+<div style="text-align:center">
+
+<button class="ai-btn" onclick="startAI()">Start AI Analysis</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- RESULT PANEL -->
+
+<div id="overlay" class="ai-overlay hidden">
+
+<div class="ai-box">
+
+<h3>Skin Analysis Complete</h3>
+
+<p id="resultText">Lesion classified as Benign (Non-Cancerous)</p>
+
+<img id="resultImg" class="result-thumb">
+
+<br>
+
+<button class="download-btn" onclick="downloadReport()">
+
+Download PDF Report
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const fileInput=document.getElementById("fileInput");
+const previewGrid=document.getElementById("previewGrid");
+
+let lastImage=null;
+
+fileInput.addEventListener("change",()=>{
+
+previewGrid.innerHTML="";
+
+[...fileInput.files].forEach(file=>{
+
+const url=URL.createObjectURL(file);
+
+lastImage=url;
+
+const img=document.createElement("img");
+
+img.src=url;
+
+previewGrid.appendChild(img);
+
+});
+
+});
+
+function selectType(card){
+
+document.querySelectorAll(".scan-card").forEach(c=>c.classList.remove("active"));
+
+card.classList.add("active");
+
+}
+
+function startAI(){
+
+if(!lastImage){
+alert("Upload an image first");
+return;
+}
+
+document.getElementById("overlay").classList.remove("hidden");
+
+document.getElementById("resultImg").src=lastImage;
+
+}
+
+function downloadReport(){
+
+const { jsPDF } = window.jspdf;
+
+let doc=new jsPDF();
+
+doc.text("CureGen Skin Cancer Detection Report",20,20);
+
+doc.text(document.getElementById("resultText").innerText,20,40);
+
+doc.save("Skin_Cancer_Report.pdf");
+
+}
+
+</script>
+
+</body>
+</html>

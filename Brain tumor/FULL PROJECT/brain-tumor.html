@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen Medical Image Upload</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+/* CureGen Background */
+
+body{
+
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.25), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+
+color:white;
+
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#36f3ff;
+}
+
+/* LAYOUT */
+
+.container-layout{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{
+margin-top:25px;
+color:#5eead4;
+}
+
+.menu-card{
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+transition:.3s;
+}
+
+.menu-card:hover{
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+color:black;
+}
+
+/* MAIN CONTAINER */
+
+.main{
+flex:1;
+padding:40px;
+}
+
+/* CENTER CONTENT */
+
+.container{
+width:950px;
+max-width:100%;
+margin:auto;
+}
+
+h1{color:#36f3ff;text-align:center;margin-bottom:6px;}
+.sub{text-align:center;color:#9ca3af;margin-bottom:35px;}
+.section-title{color:#36f3ff;margin-bottom:14px;font-weight:600;}
+
+.scan-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:18px;margin-bottom:35px;
+}
+
+.scan-card{
+background:rgba(255,255,255,.08);
+border-radius:16px;
+padding:26px 20px;
+text-align:center;
+cursor:pointer;
+position:relative;
+box-shadow:0 10px 25px rgba(0,0,0,.4);
+transition:.25s;
+}
+
+.scan-card:hover{transform:translateY(-3px);}
+
+.scan-card.active{
+background:linear-gradient(180deg,#34d399 0%,#22c55e 45%,#15803d 100%);
+color:white;
+}
+
+.scan-card .icon{
+width:52px;height:52px;margin:0 auto 14px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:22px;background:rgba(0,0,0,.15);
+}
+
+.scan-card p{font-size:13px;color:#cbd5e1;}
+
+.check{
+position:absolute;top:12px;right:12px;
+width:22px;height:22px;border-radius:50%;
+background:white;display:none;align-items:center;justify-content:center;
+font-size:13px;font-weight:700;
+}
+
+.scan-card.active .check{display:flex;color:#15803d;}
+
+.upload-box{
+background:rgba(255,255,255,.08);
+border-radius:18px;padding:50px 20px;text-align:center;
+border:2px dashed #22c55e;
+box-shadow:0 10px 25px rgba(0,0,0,.4);
+}
+
+.upload-box .up-icon{font-size:32px;margin-bottom:12px;color:#22c55e;}
+.upload-box p{font-size:13px;color:#cbd5e1;}
+.upload-box input{display:none;}
+
+.browse{color:#22c55e;cursor:pointer;font-weight:600;}
+
+.preview-grid{
+margin-top:18px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.preview-grid img{
+width:80px;height:80px;object-fit:cover;
+border-radius:8px;border:2px solid #22c55e;
+box-shadow:0 4px 12px rgba(0,0,0,.5);
+}
+
+.ai-btn{
+margin-top:30px;
+padding:14px 28px;
+border:none;border-radius:10px;
+background:linear-gradient(180deg,#00eaff,#22c55e);
+color:white;font-weight:600;
+cursor:pointer;
+}
+
+/* overlay */
+
+.ai-overlay{
+position:fixed;inset:0;
+background:rgba(0,0,0,0.75);
+display:flex;align-items:center;justify-content:center;
+z-index:9999;
+}
+
+/* ai panel */
+
+.ai-box{
+position:relative;
+width:420px;height:360px;
+background:#0b1220;
+border-radius:8px;
+padding:28px;
+text-align:center;color:white;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+transition:.4s;
+box-shadow:0 25px 60px rgba(0,0,0,.8);
+}
+
+/* result look */
+
+.ai-box.result-mode{
+background:
+linear-gradient(160deg,#050a08 0%,#0b1f14 35%,#16a34a 70%,#064e3b 100%);
+}
+
+.close-btn{
+position:absolute;top:10px;right:10px;
+width:32px;height:32px;border:none;border-radius:50%;
+background:rgba(0,0,0,.5);color:white;
+cursor:pointer;font-size:16px;
+}
+
+.progress-ring{position:relative;width:140px;height:140px;margin-bottom:18px;}
+.progress-ring svg{transform:rotate(-90deg);}
+.progress-ring circle{fill:none;stroke-width:10;}
+.progress-bg{stroke:rgba(255,255,255,.25);}
+.progress-bar{stroke:white;stroke-linecap:round;}
+
+.progress-text{
+position:absolute;inset:0;
+display:flex;align-items:center;justify-content:center;
+font-size:28px;font-weight:700;
+}
+
+.result-thumb{
+margin-top:12px;
+width:80px;height:80px;object-fit:cover;
+border-radius:8px;border:2px solid #22c55e;
+}
+
+.view-btn{
+margin-top:14px;
+padding:10px 18px;
+border:none;
+border-radius:8px;
+background:linear-gradient(180deg,#22c55e,#15803d);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+.hidden{display:none;}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">CureGen</div>
+</div>
+
+<div class="container-layout">
+
+<!-- LEFT SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card">🧠 Brain Tumor</div>
+<div class="menu-card">🔬 Skin Cancer</div>
+<div class="menu-card">❤️ Heart Attack</div>
+<div class="menu-card">👁 Eye Cataract</div>
+<div class="menu-card">🫁 Lung Disease</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">🩺 BP Detection</div>
+<div class="menu-card">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">📄 PDF Reports</div>
+<div class="menu-card">🏥 Top Hospitals</div>
+<div class="menu-card">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="main">
+
+<div class="container">
+
+<h1>Medical Image Upload</h1>
+<div class="sub">Upload your scan images for analysis</div>
+
+<div class="section-title">Select Scan Type</div>
+
+<div class="scan-grid">
+
+<div class="scan-card" id="mriCard" onclick="selectScan('mri')">
+<div class="check">✓</div>
+<div class="icon">🧲</div>
+<h3>MRI Test</h3>
+<p>Magnetic Resonance Imaging</p>
+</div>
+
+<div class="scan-card active" id="ctCard" onclick="selectScan('ct')">
+<div class="check">✓</div>
+<div class="icon">🎯</div>
+<h3>CT Scan</h3>
+<p>Computed Tomography</p>
+</div>
+
+</div>
+
+<div class="section-title">Upload Images</div>
+
+<div class="upload-box" id="dropArea">
+<div class="up-icon">⬆</div>
+<h4 id="dropText">Drop your CT scan images here</h4>
+<p>or <span class="browse" onclick="fileInput.click()">click to browse</span></p>
+<input type="file" id="fileInput" multiple accept="image/*">
+</div>
+
+<div id="previewGrid" class="preview-grid"></div>
+
+<div style="text-align:center;">
+<button class="ai-btn" onclick="startAI()">Start AI Processing</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- AI PANEL (UNCHANGED) -->
+
+<div id="overlay" class="ai-overlay hidden">
+<div id="aiBox" class="ai-box">
+
+<button class="close-btn" onclick="closeAI()">✕</button>
+
+<div id="loadingPanel">
+
+<div class="progress-ring">
+<svg width="140" height="140">
+<circle class="progress-bg" cx="70" cy="70" r="70"></circle>
+<circle class="progress-bar" cx="70" cy="70" r="70"></circle>
+</svg>
+<div id="progressText" class="progress-text">0%</div>
+</div>
+
+<h3>AI Processing</h3>
+<p>Analyzing medical scan using deep learning</p>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* SAME SCRIPT AS BEFORE */
+
+let selectedScan="ct";
+let lastPreviewURL=null;
+let aiInterval;
+
+const mriCard=document.getElementById("mriCard");
+const ctCard=document.getElementById("ctCard");
+const dropText=document.getElementById("dropText");
+const previewGrid=document.getElementById("previewGrid");
+const fileInput=document.getElementById("fileInput");
+const dropArea=document.getElementById("dropArea");
+
+function selectScan(type){
+selectedScan=type;
+if(type==="mri"){
+mriCard.classList.add("active");
+ctCard.classList.remove("active");
+dropText.innerText="Drop your MRI images here";
+}else{
+ctCard.classList.add("active");
+mriCard.classList.remove("active");
+dropText.innerText="Drop your CT scan images here";
+}
+}
+
+fileInput.addEventListener("change",()=>{
+previewGrid.innerHTML="";
+lastPreviewURL=null;
+
+[...fileInput.files].forEach((file,idx)=>{
+if(!file.type.startsWith("image/"))return;
+const url=URL.createObjectURL(file);
+if(idx===0)lastPreviewURL=url;
+const img=document.createElement("img");
+img.src=url;
+previewGrid.appendChild(img);
+});
+});
+
+["dragenter","dragover"].forEach(e=>{
+dropArea.addEventListener(e,ev=>{
+ev.preventDefault();
+dropArea.classList.add("drag");
+});
+});
+
+["dragleave","drop"].forEach(e=>{
+dropArea.addEventListener(e,ev=>{
+ev.preventDefault();
+dropArea.classList.remove("drag");
+});
+});
+
+dropArea.addEventListener("drop",e=>{
+fileInput.files=e.dataTransfer.files;
+fileInput.dispatchEvent(new Event("change"));
+});
+
+function startAI(){
+
+if(!fileInput.files.length){
+alert("Please upload an image first.");
+return;
+}
+
+const overlay=document.getElementById("overlay");
+const panel=document.getElementById("loadingPanel");
+const aiBox=document.getElementById("aiBox");
+
+overlay.classList.remove("hidden");
+aiBox.classList.remove("result-mode");
+
+panel.innerHTML=`
+<div class="progress-ring">
+<svg width="140" height="140">
+<circle class="progress-bg" cx="70" cy="70" r="70"></circle>
+<circle class="progress-bar" cx="70" cy="70" r="70"></circle>
+</svg>
+<div id="progressText" class="progress-text">0%</div>
+</div>
+<h3>AI Processing</h3>
+<p>Analyzing medical scan using deep learning</p>
+`;
+
+const bar=panel.querySelector(".progress-bar");
+const text=panel.querySelector("#progressText");
+
+let progress=0;
+const circumference=2*Math.PI*70;
+
+bar.style.strokeDasharray=circumference;
+bar.style.strokeDashoffset=circumference;
+
+clearInterval(aiInterval);
+
+aiInterval=setInterval(()=>{
+
+progress++;
+text.innerText=progress+"%";
+
+const offset=circumference-(progress/100)*circumference;
+bar.style.strokeDashoffset=offset;
+
+if(progress>=100){
+
+clearInterval(aiInterval);
+
+setTimeout(()=>{
+
+aiBox.classList.add("result-mode");
+
+panel.innerHTML=`
+<h3>Processing Complete</h3>
+<p>Your scan has been successfully analyzed.</p>
+${ lastPreviewURL ? `<img src="${lastPreviewURL}" class="result-thumb">` : "" }
+<button class="view-btn" onclick="viewResult()">VIEW RESULT</button>
+`;
+
+},300);
+}
+
+},30);
+}
+
+function viewResult(){
+alert("Result page / report can be opened here.");
+}
+
+function closeAI(){
+document.getElementById("overlay").classList.add("hidden");
+}
+
+</script>
+
+</body>
+</html>

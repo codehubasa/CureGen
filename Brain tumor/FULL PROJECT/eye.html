@@ -1,0 +1,394 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen Eye Cataract Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
+
+body{
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.25), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+}
+
+.logo{font-size:26px;font-weight:700;color:#36f3ff;}
+
+/* LAYOUT */
+
+.container-layout{display:flex;}
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{margin-top:25px;color:#5eead4;}
+
+.menu-card{
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+transition:.3s;
+}
+
+.menu-card:hover{
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+color:black;
+}
+
+/* MAIN */
+
+.main{flex:1;padding:40px;}
+
+.container{width:950px;max-width:100%;margin:auto;}
+
+h1{color:#36f3ff;text-align:center;margin-bottom:6px;}
+.sub{text-align:center;color:#9ca3af;margin-bottom:35px;}
+
+.section-title{color:#36f3ff;margin-bottom:14px;font-weight:600;}
+
+.scan-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;margin-bottom:35px;
+}
+
+.scan-card{
+background:rgba(255,255,255,.08);
+border-radius:16px;
+padding:24px;
+text-align:center;
+cursor:pointer;
+border:2px solid transparent;
+}
+
+.scan-card.active{
+border-color:#22c55e;
+}
+
+/* UPLOAD */
+
+.upload-box{
+background:rgba(255,255,255,.08);
+border-radius:18px;
+padding:60px 20px;
+text-align:center;
+border:2px dashed #22c55e;
+}
+
+.upload-box p{color:#cbd5e1;margin-top:6px;}
+
+.preview{
+margin-top:20px;
+text-align:center;
+}
+
+.preview img{
+width:200px;
+border-radius:10px;
+border:2px solid #22c55e;
+}
+
+/* BUTTON */
+
+.detect-btn{
+margin-top:30px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(120deg,#22c55e,#4ade80);
+}
+
+/* RESULT CARD */
+
+.result-card{
+margin-top:40px;
+padding:30px;
+border-radius:18px;
+background:rgba(255,255,255,0.06);
+}
+
+.result-title{
+color:#4ade80;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.bar{
+height:10px;
+border-radius:8px;
+background:#1e293b;
+overflow:hidden;
+margin:6px 0 14px 0;
+}
+
+.bar span{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#38bdf8,#22c55e);
+}
+
+.download-btn{
+margin-top:20px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:#0ea5e9;
+color:white;
+cursor:pointer;
+}
+
+.hidden{display:none;}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">CureGen</div>
+</div>
+
+<div class="container-layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card">🧠 Brain Tumor</div>
+<div class="menu-card">🔬 Skin Cancer</div>
+<div class="menu-card">❤️ Heart Attack</div>
+<div class="menu-card">👁 Eye Cataract</div>
+<div class="menu-card">🫁 Lung Disease</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">🩺 BP Detection</div>
+<div class="menu-card">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">📄 PDF Reports</div>
+<div class="menu-card">🏥 Top Hospitals</div>
+<div class="menu-card">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="container">
+
+<h1>Eye Cataract Detection</h1>
+<div class="sub">Upload retinal fundus image for cataract severity detection</div>
+
+<div class="section-title">Step 1 — Select Scan Type</div>
+
+<div class="scan-grid">
+
+<div class="scan-card active" onclick="selectScan('fundus')" id="fundus">
+👁 Fundus Photo
+</div>
+
+<div class="scan-card" onclick="selectScan('slit')" id="slit">
+💡 Slit-Lamp Image
+</div>
+
+</div>
+
+<div class="section-title">Step 2 — Upload Eye Image</div>
+
+<div class="upload-box" id="dropArea">
+
+<h3>Upload retinal or slit-lamp photograph</h3>
+<p>Drag & Drop / Click / Paste Image</p>
+
+<input type="file" id="fileInput" accept="image/*">
+
+</div>
+
+<div class="preview" id="preview"></div>
+
+<button class="detect-btn" onclick="runAI()">🔎 Click Here to Detect</button>
+
+<!-- RESULT -->
+
+<div class="result-card hidden" id="result">
+
+<div class="result-title">✅ Eye Analysis Complete</div>
+
+<p><b>Cataract Detected:</b> Yes — Nuclear Cataract</p>
+
+<p>Cataract Severity</p>
+<div class="bar"><span style="width:63%"></span></div>
+
+<p>Vision Clarity Remaining</p>
+<div class="bar"><span style="width:37%"></span></div>
+
+<p><b>Cataract Type:</b> Nuclear Sclerotic</p>
+<p><b>LOCS III Grade:</b> Grade 3 / 5</p>
+<p><b>Eye Affected:</b> Right Eye (OD)</p>
+<p><b>Surgery Required:</b> Yes — Phacoemulsification</p>
+<p><b>Confidence Score:</b> 95.9%</p>
+
+<button class="download-btn" onclick="downloadPDF()">⬇ Download Report PDF</button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+
+let imageData=null;
+
+function selectScan(type){
+
+document.getElementById("fundus").classList.remove("active");
+document.getElementById("slit").classList.remove("active");
+
+document.getElementById(type).classList.add("active");
+
+}
+
+/* FILE INPUT */
+
+const fileInput=document.getElementById("fileInput");
+const preview=document.getElementById("preview");
+
+fileInput.addEventListener("change",e=>{
+loadImage(e.target.files[0]);
+});
+
+/* DRAG DROP */
+
+const dropArea=document.getElementById("dropArea");
+
+dropArea.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+dropArea.addEventListener("drop",e=>{
+e.preventDefault();
+loadImage(e.dataTransfer.files[0]);
+});
+
+/* CLICK */
+
+dropArea.addEventListener("click",()=>{
+fileInput.click();
+});
+
+/* PASTE IMAGE */
+
+window.addEventListener("paste",e=>{
+const items=e.clipboardData.items;
+
+for(let item of items){
+if(item.type.indexOf("image")!==-1){
+const file=item.getAsFile();
+loadImage(file);
+}
+}
+});
+
+/* LOAD IMAGE */
+
+function loadImage(file){
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+imageData=e.target.result;
+
+preview.innerHTML=`<img src="${imageData}">`;
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+/* RUN AI */
+
+function runAI(){
+
+if(!imageData){
+
+alert("Please upload or paste an eye image first.");
+return;
+
+}
+
+setTimeout(()=>{
+document.getElementById("result").classList.remove("hidden");
+},1200);
+
+}
+
+/* DOWNLOAD PDF */
+
+function downloadPDF(){
+
+const text=
+`CureGen AI Eye Cataract Report
+
+Cataract Detected: Nuclear Cataract
+Severity: 63%
+Vision Clarity Remaining: 37%
+
+Type: Nuclear Sclerotic
+LOCS III Grade: 3 / 5
+Eye: Right Eye (OD)
+Surgery Required: Phacoemulsification
+
+Confidence Score: 95.9%
+`;
+
+const blob=new Blob([text],{type:"application/pdf"});
+
+const link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+
+link.download="Eye_Cataract_Report.pdf";
+
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,426 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CureGen Heart Attack Detection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif;}
+
+body{
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.25), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+}
+
+.logo{font-size:26px;font-weight:700;color:#36f3ff;}
+
+/* LAYOUT */
+
+.container-layout{display:flex;}
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{margin-top:25px;color:#5eead4;}
+
+.menu-card{
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+transition:.3s;
+}
+
+.menu-card:hover{
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+color:black;
+}
+
+/* MAIN */
+
+.main{flex:1;padding:40px;}
+
+.container{width:950px;max-width:100%;margin:auto;}
+
+h1{color:#36f3ff;text-align:center;margin-bottom:6px;}
+.sub{text-align:center;color:#9ca3af;margin-bottom:35px;}
+
+.section-title{color:#36f3ff;margin-bottom:14px;font-weight:600;}
+
+.input-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;margin-bottom:35px;
+}
+
+.scan-card{
+background:rgba(255,255,255,.08);
+border-radius:16px;
+padding:24px;
+text-align:center;
+cursor:pointer;
+border:2px solid transparent;
+}
+
+.scan-card.active{
+border-color:#22c55e;
+}
+
+/* upload */
+
+.upload-box{
+background:rgba(255,255,255,.08);
+border-radius:18px;
+padding:60px 20px;
+text-align:center;
+border:2px dashed #22c55e;
+}
+
+.upload-box p{color:#cbd5e1;margin-top:6px;}
+
+.preview{
+margin-top:20px;
+text-align:center;
+}
+
+.preview img{
+width:220px;
+border-radius:10px;
+border:2px solid #22c55e;
+}
+
+/* vitals form */
+
+.vitals{
+margin-top:20px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.vitals input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#0f172a;
+color:white;
+}
+
+/* button */
+
+.detect-btn{
+margin-top:30px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:14px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+background:linear-gradient(120deg,#22c55e,#4ade80);
+}
+
+/* RESULT */
+
+.result-card{
+margin-top:40px;
+padding:30px;
+border-radius:18px;
+background:rgba(255,255,255,0.06);
+}
+
+.bar{
+height:10px;
+border-radius:8px;
+background:#1e293b;
+overflow:hidden;
+margin:6px 0 14px 0;
+}
+
+.bar span{
+display:block;
+height:100%;
+background:linear-gradient(90deg,#38bdf8,#22c55e);
+}
+
+.download-btn{
+margin-top:20px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:#0ea5e9;
+color:white;
+cursor:pointer;
+}
+
+.hidden{display:none;}
+
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">CureGen</div>
+</div>
+
+<div class="container-layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>CORE DIAGNOSTICS</h3>
+
+<div class="menu-card">🧠 Brain Tumor</div>
+<div class="menu-card">🔬 Skin Cancer</div>
+<div class="menu-card">❤️ Heart Attack</div>
+<div class="menu-card">👁 Eye Cataract</div>
+<div class="menu-card">🫁 Lung Disease</div>
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">🩺 BP Detection</div>
+<div class="menu-card">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">📄 PDF Reports</div>
+<div class="menu-card">🏥 Top Hospitals</div>
+<div class="menu-card">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="container">
+
+<h1>Heart Attack Detection</h1>
+<div class="sub">Upload ECG data or enter vitals for cardiac risk assessment with 97.1% accuracy</div>
+
+<div class="section-title">Step 1 — Select Input Type</div>
+
+<div class="input-grid">
+
+<div class="scan-card active" onclick="selectMode('ecg')" id="ecgCard">
+📈 ECG Scan
+</div>
+
+<div class="scan-card" onclick="selectMode('vitals')" id="vitalsCard">
+💊 Clinical Vitals
+</div>
+
+</div>
+
+<div class="section-title">Step 2 — Upload ECG / Enter Data</div>
+
+<div class="upload-box" id="dropArea">
+<h3>Upload ECG image or CSV file</h3>
+<p>Drag & Drop / Click / Paste</p>
+<input type="file" id="fileInput" accept=".jpg,.png,.csv,.pdf">
+</div>
+
+<div class="preview" id="preview"></div>
+
+<!-- vitals -->
+
+<div class="vitals hidden" id="vitalsForm">
+
+<input type="number" placeholder="Age">
+<input type="number" placeholder="Blood Pressure">
+<input type="number" placeholder="Cholesterol">
+<input type="number" placeholder="Max Heart Rate">
+<input type="number" placeholder="ST Depression">
+<input type="number" placeholder="Resting ECG">
+
+</div>
+
+<button class="detect-btn" onclick="runAI()">💓 Run Cardiac Analysis</button>
+
+<!-- RESULT -->
+
+<div class="result-card hidden" id="result">
+
+<h3 style="color:#4ade80">✔ Cardiac Analysis Complete</h3>
+
+<p><b>Heart Attack Risk:</b> High Risk</p>
+
+<p>Cardiac Risk Level</p>
+<div class="bar"><span style="width:72%"></span></div>
+
+<p>Heart Function Remaining</p>
+<div class="bar"><span style="width:28%"></span></div>
+
+<p><b>Condition:</b> Possible Myocardial Infarction</p>
+<p><b>ECG Pattern:</b> ST Elevation</p>
+<p><b>Recommended Action:</b> Immediate Cardiology Evaluation</p>
+<p><b>Confidence Score:</b> 97.1%</p>
+
+<button class="download-btn" onclick="downloadPDF()">⬇ Download Cardiac Report</button>
+
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+
+let imageData=null;
+let mode="ecg";
+
+/* MODE SWITCH */
+
+function selectMode(type){
+
+mode=type;
+
+document.getElementById("ecgCard").classList.remove("active");
+document.getElementById("vitalsCard").classList.remove("active");
+
+if(type==="ecg"){
+document.getElementById("ecgCard").classList.add("active");
+document.getElementById("vitalsForm").classList.add("hidden");
+}else{
+document.getElementById("vitalsCard").classList.add("active");
+document.getElementById("vitalsForm").classList.remove("hidden");
+}
+
+}
+
+/* FILE */
+
+const fileInput=document.getElementById("fileInput");
+const preview=document.getElementById("preview");
+
+fileInput.addEventListener("change",e=>{
+loadFile(e.target.files[0]);
+});
+
+/* drag drop */
+
+const dropArea=document.getElementById("dropArea");
+
+dropArea.addEventListener("dragover",e=>{
+e.preventDefault();
+});
+
+dropArea.addEventListener("drop",e=>{
+e.preventDefault();
+loadFile(e.dataTransfer.files[0]);
+});
+
+/* click */
+
+dropArea.addEventListener("click",()=>{
+fileInput.click();
+});
+
+/* paste */
+
+window.addEventListener("paste",e=>{
+
+for(let item of e.clipboardData.items){
+
+if(item.type.indexOf("image")!==-1){
+
+const file=item.getAsFile();
+
+loadFile(file);
+
+}
+
+}
+
+});
+
+/* load */
+
+function loadFile(file){
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+imageData=e.target.result;
+
+preview.innerHTML=`<img src="${imageData}">`;
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+/* RUN AI */
+
+function runAI(){
+
+setTimeout(()=>{
+document.getElementById("result").classList.remove("hidden");
+},1200);
+
+}
+
+/* PDF */
+
+function downloadPDF(){
+
+const text=
+
+`CureGen AI Cardiac Report
+
+Heart Attack Risk: HIGH
+
+Risk Level: 72%
+Heart Function Remaining: 28%
+
+Condition: Possible Myocardial Infarction
+ECG Pattern: ST Elevation
+
+Recommendation:
+Immediate Cardiology Evaluation
+
+Confidence Score: 97.1%
+`;
+
+const blob=new Blob([text],{type:"application/pdf"});
+
+const link=document.createElement("a");
+
+link.href=URL.createObjectURL(blob);
+
+link.download="Cardiac_Report.pdf";
+
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>
+```

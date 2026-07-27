@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CureGen - Sugar Level Detection</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.3), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#36f3ff;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{
+margin-top:25px;
+color:#5eead4;
+}
+
+/* MENU CARD */
+
+.menu-card{
+background:rgba(255,255,255,0.05);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+transition:0.35s;
+}
+
+.menu-card:hover{
+background:linear-gradient(130deg,#00eaff,#00ffa6);
+color:black;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:60px;
+}
+
+/* TITLE */
+
+.title{
+text-align:center;
+margin-bottom:40px;
+}
+
+.title h1{
+font-size:46px;
+color:#36f3ff;
+}
+
+/* FORM */
+
+.form-box{
+
+max-width:900px;
+margin:auto;
+padding:40px;
+border-radius:22px;
+background:rgba(255,255,255,0.06);
+box-shadow:0 15px 40px rgba(0,0,0,0.7);
+
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+}
+
+.input-group input,
+.input-group select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#0f172a;
+color:white;
+}
+
+/* BUTTON */
+
+.analyze-btn{
+margin-top:25px;
+width:100%;
+padding:16px;
+border:none;
+border-radius:12px;
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+font-size:16px;
+cursor:pointer;
+}
+
+/* RESULT */
+
+.result-card{
+
+margin-top:25px;
+
+padding:25px;
+
+border-radius:15px;
+
+background:rgba(255,255,255,0.08);
+
+}
+
+.result-card h3{
+color:#36f3ff;
+margin-bottom:10px;
+}
+
+</style>
+
+<script>
+
+function analyzeSugar(){
+
+let fasting=parseFloat(document.getElementById("fasting").value);
+let post=parseFloat(document.getElementById("post").value);
+let hba1c=parseFloat(document.getElementById("hba1c").value);
+let bmi=parseFloat(document.getElementById("bmi").value);
+
+let score=0;
+
+/* Clinical factors */
+
+if(fasting>=100) score+=2;
+if(post>=140) score+=2;
+if(hba1c>=5.7) score+=3;
+if(bmi>=25) score+=1;
+
+let category="";
+let risk="";
+let advice="";
+
+if(score<=2){
+
+category="Normal Glucose Regulation";
+risk="Low Risk";
+
+advice="Blood glucose appears within healthy range. Maintain balanced diet and regular exercise.";
+
+}
+
+else if(score<=5){
+
+category="Prediabetes Risk";
+risk="Moderate Risk";
+
+advice="Glucose levels suggest possible insulin resistance. Lifestyle changes recommended.";
+
+}
+
+else{
+
+category="High Diabetes Risk";
+risk="High Risk";
+
+advice="Your parameters indicate significant diabetes risk. Medical consultation recommended.";
+
+}
+
+document.getElementById("result").innerHTML=
+
+"<p><b>🧪 Glucose Category:</b> "+category+"</p>"+
+"<p><b>⚠ Risk Level:</b> "+risk+"</p>"+
+"<p><b>📊 Risk Score:</b> "+score+"</p>"+
+"<p><b>🧠 Health Insight:</b> "+advice+"</p>"+
+"<p><b>💡 Recommendation:</b> Monitor blood sugar regularly, follow balanced diet, and consult a healthcare professional.</p>";
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">CureGen</div>
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">Pregnancy Guide</div>
+<div class="menu-card">Newborn Health</div>
+<div class="menu-card">BP Detection</div>
+<div class="menu-card">Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">Authentication</div>
+<div class="menu-card">PDF Reports</div>
+<div class="menu-card">Top Hospitals</div>
+<div class="menu-card">AI Assistant</div>
+
+</div>
+
+<div class="main">
+
+<div class="title">
+
+<h1>🩸 Blood Sugar Detection</h1>
+
+<p>Enter patient data to analyze diabetes risk using AI</p>
+
+</div>
+
+<div class="form-box">
+
+<div class="form-grid">
+
+<div class="input-group">
+<label>Age</label>
+<input type="number">
+</div>
+
+<div class="input-group">
+<label>Weight (kg)</label>
+<input type="number">
+</div>
+
+<div class="input-group">
+<label>BMI</label>
+<input type="number" id="bmi">
+</div>
+
+<div class="input-group">
+<label>Fasting Sugar (mg/dL)</label>
+<input type="number" id="fasting">
+</div>
+
+<div class="input-group">
+<label>Post Meal Sugar (mg/dL)</label>
+<input type="number" id="post">
+</div>
+
+<div class="input-group">
+<label>HbA1c (%)</label>
+<input type="number" id="hba1c">
+</div>
+
+<div class="input-group">
+<label>Family History</label>
+<select>
+<option>No</option>
+<option>Yes</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>Physical Activity</label>
+<select>
+<option>Low</option>
+<option>Moderate</option>
+<option>High</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>Frequent Urination</label>
+<select>
+<option>No</option>
+<option>Yes</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>Fatigue</label>
+<select>
+<option>No</option>
+<option>Yes</option>
+</select>
+</div>
+
+</div>
+
+<button class="analyze-btn" onclick="analyzeSugar()">
+
+🔍 Analyze Sugar Level
+
+</button>
+
+<div class="result-card">
+
+<h3>📊 AI Sugar Level Analysis</h3>
+
+<div id="result">
+
+<p>Status: Awaiting patient data...</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

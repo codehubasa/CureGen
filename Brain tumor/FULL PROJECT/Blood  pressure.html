@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CureGen - Blood Pressure Detection</title>
+
+<!-- PDF LIBRARY -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+
+background:
+radial-gradient(circle at 10% 10%, rgba(0,255,200,0.25), transparent 40%),
+radial-gradient(circle at 90% 80%, rgba(0,200,255,0.3), transparent 40%),
+linear-gradient(120deg,#020617,#041a2d,#020617);
+
+color:white;
+
+}
+
+/* NAVBAR */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:rgba(5,23,46,0.85);
+backdrop-filter:blur(10px);
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#36f3ff;
+text-shadow:0 0 12px #00eaff;
+}
+
+/* LAYOUT */
+
+.container{
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:260px;
+min-height:100vh;
+padding:25px;
+background:rgba(6,20,40,0.75);
+}
+
+.sidebar h3{
+margin-top:25px;
+color:#5eead4;
+}
+
+/* SIDEBAR MENU */
+
+.menu-card{
+
+display:flex;
+align-items:center;
+gap:12px;
+
+background:rgba(255,255,255,0.05);
+
+padding:14px;
+
+border-radius:14px;
+
+margin-bottom:12px;
+
+transition:0.35s;
+
+}
+
+.menu-card:hover{
+background:linear-gradient(130deg,#00eaff,#00ffa6);
+color:black;
+transform:scale(1.04);
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:60px;
+}
+
+/* TITLE */
+
+.title{
+text-align:center;
+margin-bottom:40px;
+}
+
+.title h1{
+font-size:46px;
+color:#36f3ff;
+text-shadow:0 0 15px #00eaff;
+}
+
+/* FORM CARD */
+
+.form-box{
+
+max-width:900px;
+
+margin:auto;
+
+padding:40px;
+
+border-radius:22px;
+
+background:rgba(255,255,255,0.06);
+
+box-shadow:0 15px 40px rgba(0,0,0,0.7);
+
+border:1px solid rgba(255,255,255,0.1);
+
+}
+
+/* GRID */
+
+.form-grid{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:25px;
+
+}
+
+/* INPUT GROUP */
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+color:#9ae6ff;
+}
+
+.input-group input,
+.input-group select{
+
+width:100%;
+
+padding:12px;
+
+border:none;
+
+border-radius:10px;
+
+background:#0f172a;
+
+color:white;
+
+}
+
+/* BUTTON */
+
+.analyze-btn{
+
+margin-top:30px;
+
+width:100%;
+
+padding:16px;
+
+font-size:17px;
+
+border:none;
+
+border-radius:12px;
+
+background:linear-gradient(120deg,#00eaff,#00ffa6);
+
+cursor:pointer;
+
+font-weight:bold;
+
+transition:0.35s;
+
+}
+
+.analyze-btn:hover{
+
+transform:scale(1.05);
+
+box-shadow:0 0 20px #00ffa6;
+
+}
+
+/* DOWNLOAD BUTTON */
+
+.download-btn{
+
+margin-top:15px;
+
+width:100%;
+
+padding:14px;
+
+font-size:16px;
+
+border:none;
+
+border-radius:12px;
+
+background:linear-gradient(120deg,#38bdf8,#22c55e);
+
+cursor:pointer;
+
+font-weight:bold;
+
+}
+
+.download-btn:hover{
+
+transform:scale(1.03);
+
+box-shadow:0 0 15px #22c55e;
+
+}
+
+/* RESULT CARD */
+
+.result-card{
+
+margin-top:30px;
+
+padding:30px;
+
+border-radius:18px;
+
+text-align:left;
+
+background:rgba(255,255,255,0.08);
+
+box-shadow:0 10px 30px rgba(0,0,0,0.7);
+
+}
+
+.result-card h3{
+color:#36f3ff;
+margin-bottom:10px;
+}
+
+.result-card p{
+margin-bottom:8px;
+}
+
+</style>
+
+<script>
+
+function analyzeBP(){
+
+let sys=parseInt(document.getElementById("sys").value);
+let dia=parseInt(document.getElementById("dia").value);
+
+let category="";
+let risk="";
+let advice="";
+
+if(sys<120 && dia<80){
+
+category="Normal Blood Pressure";
+risk="Low Risk";
+
+advice="Your blood pressure appears normal. Maintain healthy lifestyle habits such as balanced diet, regular exercise, and routine monitoring.";
+
+}
+
+else if(sys>=120 && sys<130 && dia<80){
+
+category="Elevated Blood Pressure";
+risk="Moderate Risk";
+
+advice="Blood pressure is slightly elevated. Reduce sodium intake, exercise regularly, and monitor BP frequently.";
+
+}
+
+else if((sys>=130 && sys<140) || (dia>=80 && dia<90)){
+
+category="Hypertension Stage 1";
+risk="High Risk";
+
+advice="Stage 1 hypertension detected. Lifestyle changes and consultation with a healthcare provider are recommended.";
+
+}
+
+else{
+
+category="Hypertension Stage 2";
+risk="Very High Risk";
+
+advice="Blood pressure is dangerously high. Immediate medical consultation is strongly recommended.";
+
+}
+
+document.getElementById("result").innerHTML=
+
+"<p><b>📌 Blood Pressure Category:</b> "+category+"</p>"+
+"<p><b>⚠ Risk Level:</b> "+risk+"</p>"+
+"<p><b>🧠 Health Insight:</b> "+advice+"</p>"+
+"<p><b>💡 Recommendation:</b> Regular monitoring, healthy diet, and professional medical consultation if symptoms persist.</p>";
+
+}
+
+
+/* DOWNLOAD PDF FUNCTION */
+
+function downloadReport(){
+
+const { jsPDF } = window.jspdf;
+
+let doc = new jsPDF();
+
+let resultText = document.getElementById("result").innerText;
+
+doc.setFontSize(18);
+doc.text("CureGen Blood Pressure Report",20,20);
+
+doc.setFontSize(12);
+doc.text(resultText,20,40);
+
+doc.text("Generated by CureGen AI Health System",20,100);
+
+doc.save("CureGen_BP_Report.pdf");
+
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<div class="logo">CureGen</div>
+
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>GUIDANCE</h3>
+
+<div class="menu-card">🤰 Pregnancy Guide</div>
+<div class="menu-card">👶 Newborn Health</div>
+<div class="menu-card">🩺 BP Detection</div>
+<div class="menu-card">🩸 Sugar Detection</div>
+
+<h3>AUXILIARY</h3>
+
+<div class="menu-card">🔐 Authentication</div>
+<div class="menu-card">📄 PDF Reports</div>
+<div class="menu-card">🏥 Top Hospitals</div>
+<div class="menu-card">🤖 AI Assistant</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="title">
+
+<h1>🩺 Blood Pressure Detection</h1>
+
+<p>Enter patient data to analyze hypertension risk using AI</p>
+
+</div>
+
+<div class="form-box">
+
+<div class="form-grid">
+
+<div class="input-group">
+<label>👤 Age</label>
+<input type="number">
+</div>
+
+<div class="input-group">
+<label>⚖ Weight (kg)</label>
+<input type="number">
+</div>
+
+<div class="input-group">
+<label>⬆ Systolic Pressure</label>
+<input type="number" id="sys">
+</div>
+
+<div class="input-group">
+<label>⬇ Diastolic Pressure</label>
+<input type="number" id="dia">
+</div>
+
+<div class="input-group">
+<label>🚬 Smoking Habit</label>
+<select>
+<option>No</option>
+<option>Occasional</option>
+<option>Regular</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>🏃 Physical Activity</label>
+<select>
+<option>Low</option>
+<option>Moderate</option>
+<option>High</option>
+</select>
+</div>
+
+</div>
+
+<button class="analyze-btn" onclick="analyzeBP()">
+🔍 Analyze Blood Pressure
+</button>
+
+<div class="result-card">
+
+<h3>📊 AI Blood Pressure Analysis</h3>
+
+<div id="result">
+
+<p><b>Status:</b> Awaiting patient data...</p>
+
+<p>The AI model will evaluate blood pressure levels and provide health insights.</p>
+
+</div>
+
+</div>
+
+<button class="download-btn" onclick="downloadReport()">
+📄 Download Report (PDF)
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
