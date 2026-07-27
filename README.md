@@ -1,120 +1,221 @@
-<img width="1877" height="852" alt="Screenshot 2026-04-18 142405" src="https://github.com/user-attachments/assets/8b1bb4dc-317b-4fdc-b9a7-1db1c31b228c" />
----
-<img width="1873" height="846" alt="Screenshot 2026-04-18 142450" src="https://github.com/user-attachments/assets/48ce84eb-5619-449e-8ae4-fde5f4968d8b" />
----
-<img width="1893" height="832" alt="Screenshot 2026-04-18 142606" src="https://github.com/user-attachments/assets/cfaa2a38-8258-4b2a-bc33-b8ffd2380554" />
----
-<img width="1881" height="859" alt="Screenshot 2026-04-18 142720" src="https://github.com/user-attachments/assets/e778e531-f0f0-409c-935a-32db5c0fc5f3" />
----
-<img width="523" height="452" alt="Screenshot 2026-04-18 142852" src="https://github.com/user-attachments/assets/63f77e8e-81c5-48f2-9136-220d1708c886" />
----
-<img width="515" height="446" alt="Screenshot 2026-04-18 142944" src="https://github.com/user-attachments/assets/821cb432-97ee-49c5-84f0-9010b1c628f1" />
+# 🩺 CureGen AI
+
+An AI-powered multi-disease diagnosis platform that leverages Deep Learning, Machine Learning, and Computer Vision to assist in the early detection of critical health conditions. Built with a Flask REST API backend and an interactive web interface, CureGen AI provides real-time medical predictions, confidence scores, and automated diagnostic reports for healthcare assistance.
+
+🚧 **Project Status:** Ongoing – New AI diagnostic modules and advanced healthcare features are actively being developed.
+
 ---
 
-Brain Tumor Detection AI
+## 🚀 Features
 
- Brain Tumor Detection is a powerful Flask-based web application that detects brain tumors from MRI and CT scan images using deep learning models. This system provides fast, accurate predictions along with detailed reports, making it useful for educational, research, and prototype medical applications.
+- 🧠 Brain Tumor Detection using MRI and CT scan images
+- 👁️ Eye Cataract Detection using Deep Learning (CNN)
+- ❤️ Heart Disease Risk Prediction using Machine Learning
+- 📊 Real-time prediction with confidence score
+- 📄 Automated PDF medical report generation
+- 📤 Secure image upload and preprocessing
+- 🔗 RESTful API architecture with Flask
+- ⚡ Fast AI inference with optimized prediction pipeline
+- 📱 Responsive and user-friendly web interface
+- 🔒 Input validation and backend error handling
+- 🩺 Multi-disease diagnosis platform under one application
+- 🚀 Modular architecture for adding future disease detection models
 
-🚀 Features
+---
 
-🧠 MRI & CT Scan Support
+## 🛠️ Tech Stack
 
-Analyze both MRI and CT scan images seamlessly
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+- Fetch API
 
-⚡ Real-Time Predictions
+### Backend
+- Python
+- Flask
+- Flask-CORS
+- REST API
 
-Fast inference using pre-trained TensorFlow models
+### Artificial Intelligence & Machine Learning
+- TensorFlow
+- Keras
+- Scikit-learn
+- NumPy
+- Pillow
 
-📊 Detailed Results
+### Models
+- Brain Tumor Detection (MRI & CT)
+- Eye Cataract Detection (CNN)
+- Heart Disease Risk Prediction (Machine Learning)
 
-Displays:
-Predicted tumor type
-Confidence score
-Class probabilities
+---
 
-📄 PDF Report Generation
-Download complete analysis results as a PDF
+## 📸 Project Preview
 
-🖱️ Drag & Drop Upload
-Simple and user-friendly image upload interface
+<!-- Add screenshots here, e.g. -->
+<!-- ![Preview 1](path/to/image1.png) -->
+<!-- ![Preview 2](path/to/image2.png) -->
 
-📈 Progress Visualization
-Real-time processing indicator for better UX
+---
 
-🧬 Supported Tumor Types
-Glioma
-Meningioma
-Pituitary
-No Tumor
+## 🏗️ System Architecture
 
-🛠️ Tech Stack
+```
+Frontend (HTML/CSS/JavaScript)
+            │
+            ▼
+      Flask REST API
+            │
+            ▼
+────────────────────────────────────
+│ Brain Tumor Detection Model      │
+│ Eye Cataract Detection Model     │
+│ Heart Disease Prediction Model   │
+────────────────────────────────────
+            │
+            ▼
+     AI Prediction Results
+            │
+            ▼
+     PDF Report Generation
+```
 
-Backend: Flask (Python)
+---
 
-AI Models: TensorFlow / Keras
+## ⚙️ How It Works
 
-Frontend: HTML, CSS, JavaScript
+### 🧠 Brain Tumor Detection
+1. Upload an MRI or CT scan image.
+2. The backend preprocesses the image.
+3. TensorFlow model performs inference.
+4. The system returns:
+   - Tumor Detected / No Tumor Detected
+   - Confidence Score
+   - Scan Type
 
-Other Tools: PDF generation libraries
+### 👁️ Eye Cataract Detection
+1. Upload an eye image.
+2. Image is preprocessed automatically.
+3. CNN model predicts cataract presence.
+4. Result and confidence score are displayed instantly.
 
-📋 Prerequisites
+### ❤️ Heart Disease Prediction
+1. Enter patient information:
+   - Age
+   - Blood Pressure
+   - Cholesterol
+   - Heart Rate
+2. Machine Learning model predicts risk level.
+3. System displays:
+   - High / Low Risk
+   - Risk Percentage
+   - Personalized prediction result
 
-Make sure you have:
-Python 3.8+
-pip (Python package manager)
+---
 
-🧪 How to Use
-Select scan type (MRI or CT)
+## 🌟 Key Highlights
 
-Upload an image
+- AI-powered healthcare assistant
+- Multi-model medical diagnosis
+- Deep Learning & Machine Learning integration
+- RESTful Flask backend
+- Real-time predictions
+- Confidence score visualization
+- Automated medical reports
+- Modular and scalable architecture
+- Clean and responsive user interface
 
-Click "Start AI Processing"
+---
 
-View prediction results
+## 📂 Project Structure
 
-Download PDF report
+```
+CureGen-AI
+│
+├── Backend
+│   ├── app.py
+│   ├── requirements.txt
+│   ├── brain/
+│   ├── eye/
+│   └── heart/
+│
+├── Frontend
+│   ├── index.html
+│   ├── api-client.js
+│   ├── brain_tumor_detection.html
+│   ├── eye-cataract-detection.html
+│   ├── heart-attack.html
+│   └── ...
+│
+└── README.md
+```
 
-⚠️ Error Handling
+---
 
-The system handles:
-Invalid or missing image uploads
-Unsupported file formats
-File size limits (max: 16MB)
-Model loading issues
-Prediction failures
+## 📦 Installation
 
-🌟 Future Improvements (Optional Ideas)
+**1. Clone Repository**
+```bash
+git clone https://github.com/Ankana-Sadhukhan/CureGen-AI.git
+```
 
-User authentication system
-Cloud deployment (Render / AWS / GCP)
-Model accuracy improvements
-Medical dataset expansion
-Doctor dashboard integration
+**2. Navigate to Project**
+```bash
+cd CureGen-AI
+```
 
-📊 Impact 
+**3. Install Backend Dependencies**
+```bash
+cd Backend
+pip install -r requirements.txt
+```
 
-Demonstrates end-to-end AI system design
-Combines Deep Learning + Full Stack Development
-Real-world use case in Healthcare AI
-Implements model deployment + API integration
+**4. Start Flask Server**
+```bash
+python app.py
+```
 
-🔗 API Endpoints
+The backend will run on:
+```
+http://127.0.0.1:5000
+```
 
-📥 GET Routes
+**5. Open the Frontend**
 
-Endpoint	Description
-/	Home page
-/upload-page	Upload interface
-/result	Results page
-/health	Model status check
-/uploads/<filename>	Access uploaded files
+Open any HTML file inside the `Frontend` folder using your browser.
 
-🙌 Author
+Example:
+- `Frontend/index.html`
+- `Frontend/brain_tumor_detection.html`
+- `Frontend/eye-cataract-detection.html`
+- `Frontend/heart-attack.html`
 
-Asmita Banerjee
+---
 
-💻 AI + Full Stack Developer
+## 🔮 Future Enhancements
 
-Linekdin: https://www.linkedin.com/in/asmita-banerjee-874461364/
+- 🤖 Explainable AI (Grad-CAM, SHAP, LIME)
+- ☁️ Cloud Deployment
+- 👤 Secure User Authentication
+- 🏥 Hospital Dashboard
+- 📊 Patient History Management
+- 🧬 Additional Disease Detection Models
+- 📱 Mobile Application
+- 🌐 Multi-language Support
+- 🔔 Smart Health Notifications
 
-Email ID: banerjeeasmita19@gmail.com
+---
+
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ Star on GitHub. It helps support the project and motivates future development!
+
+---
+
+## 👩‍💻 Author
+
+**AI + Full Stack Developer**
+
+- LinkedIn: [Asmita Banerjee](https://www.linkedin.com/in/asmita-banerjee-874461364/)
+- Email: banerjeeasmita19@gmail.com
