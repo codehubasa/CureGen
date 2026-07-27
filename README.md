@@ -53,11 +53,14 @@ An AI-powered multi-disease diagnosis platform that leverages Deep Learning, Mac
 
 ## 📸 Project Preview
 
-<!-- Add screenshots here, e.g. -->
-<!-- ![Preview 1](path/to/image1.png) -->
-<!-- ![Preview 2](path/to/image2.png) -->
 
----
+<img width="1472" height="924" alt="image" src="https://github.com/user-attachments/assets/3c9fec38-9681-40b9-8443-79e3a9ae32b8" />
+------
+<img width="1435" height="922" alt="image" src="https://github.com/user-attachments/assets/d1d9a752-3ae0-4916-982d-feb2b9814a57" />
+------
+<img width="1436" height="921" alt="image" src="https://github.com/user-attachments/assets/0cf2bdc0-1683-45a3-8ee7-35737c6cf988" />
+------
+<img width="1431" height="917" alt="image" src="https://github.com/user-attachments/assets/132abb99-fdc5-4ff4-bcab-78192a166bbe" />
 
 ## 🏗️ System Architecture
 
